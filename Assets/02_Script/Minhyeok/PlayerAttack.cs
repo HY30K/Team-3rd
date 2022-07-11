@@ -6,7 +6,10 @@ public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] Transform pos; // 충돌감지 상자 위치
     [SerializeField] Vector2 boxSize; // 충돌감지 상자 크기
-    [SerializeField] float damage;
+    [SerializeField] float attackPower;
+
+    public float AttackPower { get; set; }
+
     void Start()
     {
 
@@ -24,7 +27,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 if(collider.tag == "Enemy")
                 {
-                    collider.GetComponent<IDamage>().OnDamage(damage);
+                    collider.GetComponent<IDamage>().OnDamage(0.5f + attackPower);
                 }
             }
         }
