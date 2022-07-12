@@ -21,19 +21,19 @@ public class Skill2 : MonoBehaviour
             dashCurrentCoolDown = 0;
         }
     }
-    //private void Skill()
-    //{
-    //    if (dashCurrentCoolDown <= 0)
-    //    {
-    //        if (Input.GetKeyDown(KeyCode.LeftShift))
-    //        {
-    //            if (playerMove.X != 0 || playerMove.Y != 0)
-    //            {
-    //                transform.DOLocalMove(new Vector3(playerMove.X * 2, playerMove.Y * 2), 0.3f).SetRelative();
-    //                dashCurrentCoolDown = dashMaxCoolDown;
-    //            }
-    //        }
-    //    }
-    //    dashCurrentCoolDown -= Time.deltaTime;
-    //}
+    /*private void Skill()
+    {
+        if (dashCurrentCoolDown <= 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if (playerMove.X != 0 || playerMove.Y != 0)
+                {
+                    transform.DOLocalMove(new Vector3(playerMove.X * 2, playerMove.Y * 2), 0.3f).SetRelative();
+                    dashCurrentCoolDown = dashMaxCoolDown;
+                }
+            }
+        }
+        dashCurrentCoolDown -= Time.deltaTime;
+    }*/
 }

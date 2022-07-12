@@ -470,8 +470,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uBAB8\uC9F1 \uC2E4\uD328.."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0038f0f568748484a89737383af2b7cd, type: 2}
-  m_sharedMaterial: {fileID: -3282918425946353055, guid: 0038f0f568748484a89737383af2b7cd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -578,8 +578,7 @@ MonoBehaviour:
   fadein: {fileID: 1050303636}
   option: {fileID: 1050303636}
   hideMap: {fileID: 1050303636}
-  close: {fileID: 0}
-  Start: {fileID: 0}
+  sound: {fileID: 0}
 --- !u!4 &717224219
 Transform:
   m_ObjectHideFlags: 0
