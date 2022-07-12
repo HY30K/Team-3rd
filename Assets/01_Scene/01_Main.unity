@@ -709,6 +709,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634ef239fd1b91044acb7e87afd1d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeout: {fileID: 1588609638}
+  fadein: {fileID: 1588609638}
+  option: {fileID: 1805016117}
+  hideMap: {fileID: 142581345}
+  sound: {fileID: 2035788035}
+  audio: {fileID: 867928434}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
