@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private Transform pos; // 충돌감지 상자 위치
+    [SerializeField] private Transform rangePos; // 충돌감지 상자 위치
     [SerializeField] private Vector2 boxSize; // 충돌감지 상자 크기
-    [SerializeField] private float attackPower;
-
-    public float AttackPower { get; set; }
+    private float attackPower;
 
     void Update()
     {
@@ -18,14 +16,20 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Collider2D [] collider2D = Physics2D.OverlapBoxAll(pos.position, boxSize, 0); //Enemy 태그 닿으면 데미지 -1
+            Collider2D [] collider2D = Physics2D.OverlapBoxAll(rangePos.position, boxSize, 0); //Enemy 태그 닿으면 데미지 -1
             foreach (Collider2D collider in collider2D)
             {
                 if(collider.tag == "Enemy")
                 {
                     collider.GetComponent<IDamage>().OnDamage(0.5f + attackPower);
+                    attackPower += 0.2f;
                 }
             }
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(rangePos.position, boxSize);
     }
 }

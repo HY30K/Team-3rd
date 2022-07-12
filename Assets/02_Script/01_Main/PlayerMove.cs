@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] private Transform rangePos;
     private Rigidbody2D rb2d = null;
     private float x;
     private float y;
@@ -17,6 +18,7 @@ public class PlayerMove : MonoBehaviour
     private void Update()
     {
         Move();
+        RangePositionChange();
     }
     private void Move()
     {
@@ -35,5 +37,9 @@ public class PlayerMove : MonoBehaviour
                 agilityIncreaseDelay = 0;
             }
         }
+    }
+    private void RangePositionChange()
+    {
+        rangePos.localPosition = new Vector2(x, y);
     }
 }
