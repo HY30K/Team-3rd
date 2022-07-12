@@ -18,7 +18,7 @@ public class Item : MonoBehaviour
 
     [SerializeField] private List<Sprite> itemIamge = new List<Sprite>();
 
-    private PlayerMove player;
+    private Player player;
     void Update()
     {
         if (Physics2D.OverlapCircle(transform.position, 3, 1 << 7) != null && itemGet)
