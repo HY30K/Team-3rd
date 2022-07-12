@@ -11,6 +11,8 @@ public class PlayerMove : MonoBehaviour
     private float agility;
     private float agilityIncreaseDelay;
 
+    public float X => x;
+    public float Y => y;
     public float Agility => agility;
 
     private void Awake()

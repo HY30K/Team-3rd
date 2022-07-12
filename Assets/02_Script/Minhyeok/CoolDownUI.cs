@@ -18,11 +18,13 @@ public class CoolDownUI : MonoBehaviour
     public void SetMaxCoolDown(float value)
     {
         maxCoolDown = value;
+        UpdateFillAmount();
         
     }
     public void SetCurrentCoolDown(float value)
     {
         currentCoolDown = value;
+        UpdateFillAmount();
 
     }
     public void UpdateFillAmount()
