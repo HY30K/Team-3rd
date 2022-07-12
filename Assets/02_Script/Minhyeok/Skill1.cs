@@ -7,7 +7,7 @@ public class Skill1 : MonoBehaviour
     [SerializeField] GameObject skillPrefab;
     //[SerializeField] GameObject particle;
     [SerializeField] ObjectPooler objectPooler;
-    [SerializeField] Player player;
+    [SerializeField] Player playerMove;
     [SerializeField] private float maxCoolDown = 2;
     float currentCoolDown;
     Rigidbody2D rigid;
@@ -16,30 +16,30 @@ public class Skill1 : MonoBehaviour
     public float CurrentCoolDown => currentCoolDown;
     void Update()
     {
-        Skill();
+        //Skill();
         if(currentCoolDown <= 0)
         {
             currentCoolDown = 0;
         }
     }
 
-    private void Skill()
+    /*private void Skill()
     {
         if (currentCoolDown <= 0)
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                if (player.MoveDirection.x != 0 || player.MoveDirection.y != 0)
+                if (playerMove.X != 0 || playerMove.Y != 0)
                 {
                     GameObject prefab = objectPooler.SpawnPrefab("Circle");
                     prefab.transform.position = transform.position;
                     rigid = prefab.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(new Vector2(player.MoveDirection.x, player.MoveDirection.y) * 20, ForceMode2D.Impulse);
+                    rigid.AddForce(new Vector2(playerMove.X, playerMove.Y) * 20, ForceMode2D.Impulse);
                     currentCoolDown = maxCoolDown;
                 }
             }
         }
         currentCoolDown -= Time.deltaTime;
-    }
+    }*/
 }
 
