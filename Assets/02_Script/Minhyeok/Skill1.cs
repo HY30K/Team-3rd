@@ -7,7 +7,7 @@ public class Skill1 : MonoBehaviour
     [SerializeField] GameObject skillPrefab;
     //[SerializeField] GameObject particle;
     [SerializeField] ObjectPooler objectPooler;
-    [SerializeField] PlayerMove playerMove;
+    [SerializeField] Player playerMove;
     [SerializeField] private float maxCoolDown = 2;
     float currentCoolDown;
     Rigidbody2D rigid;
@@ -16,14 +16,14 @@ public class Skill1 : MonoBehaviour
     public float CurrentCoolDown => currentCoolDown;
     void Update()
     {
-        Skill();
+        //Skill();
         if(currentCoolDown <= 0)
         {
             currentCoolDown = 0;
         }
     }
 
-    private void Skill()
+    /*private void Skill()
     {
         if (currentCoolDown <= 0)
         {
@@ -40,6 +40,6 @@ public class Skill1 : MonoBehaviour
             }
         }
         currentCoolDown -= Time.deltaTime;
-    }
+    }*/
 }
 
