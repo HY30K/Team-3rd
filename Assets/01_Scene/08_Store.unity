@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 790558635}
   - component: {fileID: 790558634}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271481450c27fa342ac489cf29096467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 0
+  money: 10
 --- !u!212 &790558632
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -546,6 +546,10 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1364782325321543240, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1364782326360959152, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_Name
       value: ShopTable
@@ -604,7 +608,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1364782326360959155, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: itemPrice
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1364782326360959155, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: interacting

@@ -16,7 +16,8 @@ public class ShopItem : InteractObj
     public GameObject Image;
     public GameObject itemPrefab;
 
-    public int money;
+    
+
     private enum ItemType
     {
         Protein
@@ -47,9 +48,9 @@ public class ShopItem : InteractObj
     }
     public bool BuyItem(int price)
     {
-        if (money >= price)
+        if (PlayerMoney.money >= price)
         {
-            money -= price;
+            PlayerMoney.money -= price;
             //UIManager.instance.coinUi();
             Debug.Log("아이템 구입");
             GameObject item = Instantiate(itemPrefab, gameObject.transform.position, Quaternion.identity);

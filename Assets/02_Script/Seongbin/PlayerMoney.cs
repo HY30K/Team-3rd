@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class PlayerMoney : MonoBehaviour
 {
-    public int money = 0;
+    public static int money;
+    private void Awake()
+    {
+        money = 0;
+    }
 
     void Update()
     {
