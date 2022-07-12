@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 419210161}
   - component: {fileID: 419210160}
   - component: {fileID: 419210159}
+  - component: {fileID: 419210162}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -359,7 +360,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &419210158
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -429,7 +430,20 @@ MonoBehaviour:
   skillPrefab: {fileID: 2641867185902978557, guid: 83f273b8523532d4b95ff91bbb6d8256, type: 3}
   objectPooler: {fileID: 419210160}
   playerMove: {fileID: 419210159}
-  direction: 0
+--- !u!114 &419210162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419210153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40ddc9f173695a45827da823e2dbf94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AddPower: 2
+  playerMove: {fileID: 419210159}
 --- !u!1 &595431197
 GameObject:
   m_ObjectHideFlags: 0

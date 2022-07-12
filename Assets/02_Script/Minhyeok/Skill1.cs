@@ -8,7 +8,6 @@ public class Skill1 : MonoBehaviour
     //[SerializeField] GameObject particle;
     [SerializeField] ObjectPooler objectPooler;
     [SerializeField] PlayerMove playerMove;
-    [SerializeField] int direction = 0;
     float skillSpeed = 5f;
     Rigidbody2D rigid;
     void Update()
