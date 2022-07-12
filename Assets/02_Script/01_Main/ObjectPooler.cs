@@ -34,6 +34,7 @@ public class ObjectPooler : MonoBehaviour
     public GameObject SpawnPrefab(string key)
     {
         GameObject prefab = null;
+        //GameObject newPrefab = Resources.Load<GameObject>($"03_Prefab/{key}");
 
         if (poolers[key].Count > 0)
         {
@@ -42,7 +43,7 @@ public class ObjectPooler : MonoBehaviour
         }
         else
         {
-            prefab = Instantiate(Resources.Load($"03_Prefab/{key}") as GameObject);
+            //prefab = Instantiate(newPrefab);
             prefab.name = prefab.name.Replace("(Clone)", null);
         }
 
