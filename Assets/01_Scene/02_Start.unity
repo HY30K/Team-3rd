@@ -1156,7 +1156,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Main
+          m_StringArgument: 01_Main
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &707709268
@@ -2097,8 +2097,7 @@ MonoBehaviour:
   fadein: {fileID: 1394192595}
   option: {fileID: 1796460344}
   hideMap: {fileID: 1753662294}
-  close: {fileID: 0}
-  Start: {fileID: 0}
+  sound: {fileID: 0}
 --- !u!1 &1753662292
 GameObject:
   m_ObjectHideFlags: 0

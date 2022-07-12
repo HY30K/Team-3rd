@@ -247,7 +247,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1548564723}
-  - component: {fileID: 1548564724}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -270,18 +269,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1548564724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548564722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 696e87a2ce37c50478a1d10b37f4b7c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2058872285
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,6 +313,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634ef239fd1b91044acb7e87afd1d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeout: {fileID: 0}
+  fadein: {fileID: 0}
+  option: {fileID: 0}
+  hideMap: {fileID: 0}
+  sound: {fileID: 0}
 --- !u!1 &2105916481
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +327,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2105916482}
-  - component: {fileID: 2105916483}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -358,15 +349,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2105916483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2105916481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87ace2457b72ad145b33043bbbbe15b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
