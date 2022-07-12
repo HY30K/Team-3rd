@@ -16,5 +16,9 @@ public class CoolDownUI : MonoBehaviour
         {
             fill.fillAmount = player.GetComponent<Skill1>().CurrentCoolDown / player.GetComponent<Skill1>().MaxCoolDown;
         }
+        if(gameObject.name == "Skill2UI")
+        {
+            fill.fillAmount = player.GetComponent<Skill2>().DashCurrentCoolDown / player.GetComponent<Skill2>().DashmaxCoolDown;
+        }
     }
 }

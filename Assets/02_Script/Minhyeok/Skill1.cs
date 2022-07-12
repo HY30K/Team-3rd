@@ -10,7 +10,6 @@ public class Skill1 : MonoBehaviour
     [SerializeField] PlayerMove playerMove;
     [SerializeField] private float maxCoolDown = 2;
     float currentCoolDown;
-    float skillSpeed = 5f;
     Rigidbody2D rigid;
 
     public float MaxCoolDown => maxCoolDown;
@@ -36,8 +35,8 @@ public class Skill1 : MonoBehaviour
                     prefab.transform.position = transform.position;
                     rigid = prefab.GetComponent<Rigidbody2D>();
                     rigid.AddForce(new Vector2(playerMove.X, playerMove.Y) * 20, ForceMode2D.Impulse);
+                    currentCoolDown = maxCoolDown;
                 }
-                currentCoolDown = maxCoolDown;
             }
         }
         currentCoolDown -= Time.deltaTime;
