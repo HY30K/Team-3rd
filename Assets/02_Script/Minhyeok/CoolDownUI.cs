@@ -6,44 +6,15 @@ using UnityEngine.UI;
 public class CoolDownUI : MonoBehaviour
 {
     [SerializeField] Image fill;
-    [SerializeField] float maxCoolDown;
-    [SerializeField] float currentCoolDown;
-    bool UseSkill = false;
+    [SerializeField] GameObject player;
+    float currentCoolDown;
+    bool useSkill = false;
 
-    private void Awake()
-    {
-        currentCoolDown = maxCoolDown;
-    }
-
-    public void SetMaxCoolDown(float value)
-    {
-        maxCoolDown = value;
-        UpdateFillAmount();
-        
-    }
-    public void SetCurrentCoolDown(float value)
-    {
-        currentCoolDown = value;
-        UpdateFillAmount();
-
-    }
-    public void UpdateFillAmount()
-    {
-        fill.fillAmount = Mathf.Lerp(0,1,currentCoolDown/maxCoolDown);
-    }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-            UseSkill = true;
-        if(UseSkill == true)
+        if (gameObject.name == "Skill1UI")
         {
-            currentCoolDown -= Time.deltaTime;
-            UpdateFillAmount();
-            if (currentCoolDown <= 0f)
-            {
-                currentCoolDown = maxCoolDown;
-                UseSkill = false;
-            }
+            fill.fillAmount = player.GetComponent<Skill1>().CurrentCoolDown / player.GetComponent<Skill1>().MaxCoolDown;
         }
     }
 }

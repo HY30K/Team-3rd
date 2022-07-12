@@ -8,22 +8,25 @@ public class Skill1 : MonoBehaviour
     //[SerializeField] GameObject particle;
     [SerializeField] ObjectPooler objectPooler;
     [SerializeField] PlayerMove playerMove;
-    [SerializeField] private float attackLate = 2;
-    float coolTime;
+    [SerializeField] private float maxCoolDown = 2;
+    float currentCoolDown;
     float skillSpeed = 5f;
     Rigidbody2D rigid;
+
+    public float MaxCoolDown => maxCoolDown;
+    public float CurrentCoolDown => currentCoolDown;
     void Update()
     {
         Skill();
-        if(coolTime <= 0)
+        if(currentCoolDown <= 0)
         {
-            coolTime = 0;
+            currentCoolDown = 0;
         }
     }
 
     private void Skill()
     {
-        if (coolTime <= 0)
+        if (currentCoolDown <= 0)
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
@@ -34,10 +37,10 @@ public class Skill1 : MonoBehaviour
                     rigid = prefab.GetComponent<Rigidbody2D>();
                     rigid.AddForce(new Vector2(playerMove.X, playerMove.Y) * 20, ForceMode2D.Impulse);
                 }
-                coolTime = attackLate;
+                currentCoolDown = maxCoolDown;
             }
         }
-        coolTime -= Time.deltaTime;
+        currentCoolDown -= Time.deltaTime;
     }
 }
 
