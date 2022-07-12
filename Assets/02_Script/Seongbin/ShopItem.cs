@@ -15,6 +15,8 @@ public class ShopItem : InteractObj
 
     public GameObject Image;
     public GameObject itemPrefab;
+
+    public int money;
     private enum ItemType
     {
         Protein
@@ -33,7 +35,7 @@ public class ShopItem : InteractObj
         itemBG.transform.localScale = new Vector3(x, itemText.preferredHeight + y * 0.5f);
         item.transform.position += new Vector3(0, y * 0.5f);*/
     }
-    /*protected override void Interact()
+    protected override void Interact()
     {
         base.Interact();
         Debug.Log(gameObject.name);
@@ -45,9 +47,9 @@ public class ShopItem : InteractObj
     }
     public bool BuyItem(int price)
     {
-        if (GameManager.instance.playerCoinCollect.money >= price)
+        if (money >= price)
         {
-            GameManager.instance.playerCoinCollect.money -= price;
+            money -= price;
             //UIManager.instance.coinUi();
             Debug.Log("아이템 구입");
             GameObject item = Instantiate(itemPrefab, gameObject.transform.position, Quaternion.identity);
@@ -66,5 +68,5 @@ public class ShopItem : InteractObj
             return true;
         }
         return false;
-    }*/
+    }
 }
