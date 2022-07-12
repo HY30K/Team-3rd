@@ -12,6 +12,9 @@ public class PlayerMoney : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            money++;
+        }
     }
 }
