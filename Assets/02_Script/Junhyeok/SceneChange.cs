@@ -46,11 +46,15 @@ public class SceneChange : MonoBehaviour
     //사운드설정 열기
     public void Sound()
     {
+        hideMap.gameObject.SetActive(true);
+
         sound.gameObject.SetActive(true);
     }
     //사운드설정 닫기
     public void Back()
     {
+        hideMap.gameObject.SetActive(false);
+
         sound.gameObject.SetActive(false);
     }
     //설정창 닫기 
