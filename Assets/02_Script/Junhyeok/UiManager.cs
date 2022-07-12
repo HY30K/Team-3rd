@@ -30,6 +30,15 @@ public class UIManager : MonoBehaviour
         {
             Close();
         }
+        if (isOpen == true)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+
     }
     private void OnEnable()
     {
@@ -63,7 +72,7 @@ public class UIManager : MonoBehaviour
         hideMap.gameObject.SetActive(true);
 
         option.gameObject.SetActive(true);
-        option.gameObject.transform.DOScale(1, 1);
+        option.gameObject.transform.DOScale(1, 1).SetUpdate(true);
         isOpen = true;
     }
     //사운드설정 열기
