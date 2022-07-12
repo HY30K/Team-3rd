@@ -5,6 +5,7 @@ using System;
 
 public class Item : MonoBehaviour
 {
+    private GameObject player;
     public enum ItemType
     {
         Protein
@@ -18,24 +19,19 @@ public class Item : MonoBehaviour
 
     [SerializeField] private List<Sprite> itemIamge = new List<Sprite>();
 
-    private Player player;
-    void Update()
+    private void Awake()
     {
-        if (Physics2D.OverlapCircle(transform.position, 3, 1 << 7) != null && itemGet)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, followSpeed * Time.deltaTime);
-            if (Physics2D.OverlapCircle(transform.position, 0.2f, 1 << 7) != null)
-            {
-                GetItem();
-                Destroy(gameObject);
-            }
-        }
+        rig = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void SpawnItem()
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        gameObject.SetActive(true);
-        rig.AddForce(new Vector2(0, 10) * power);
-        Invoke("canGetCoin", 1f);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+                GetItem();
+                Destroy(gameObject, 0.75f);
+        }
     }
     private void GetItem()
     {
@@ -48,7 +44,7 @@ public class Item : MonoBehaviour
                 break;
         }
     }
-    private void canGetCoin()
+    private void canGetItem()
     {
         itemGet = true;
     }
@@ -62,5 +58,11 @@ public class Item : MonoBehaviour
             default:
                 break;
         }
+    }
+    public void SpawnItem()
+    {
+        gameObject.SetActive(true);
+        rig.AddForce(new Vector2(0, 10) * power);
+        Invoke("canGetItem", 1f);
     }
 }

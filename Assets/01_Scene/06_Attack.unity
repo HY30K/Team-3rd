@@ -246,10 +246,10 @@ GameObject:
   - component: {fileID: 419210155}
   - component: {fileID: 419210158}
   - component: {fileID: 419210157}
-  - component: {fileID: 419210163}
   - component: {fileID: 419210161}
-  - component: {fileID: 419210162}
   - component: {fileID: 419210160}
+  - component: {fileID: 419210162}
+  - component: {fileID: 419210163}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPrefab: {fileID: 2641867185902978557, guid: 83f273b8523532d4b95ff91bbb6d8256, type: 3}
   objectPooler: {fileID: 419210160}
-  playerMove: {fileID: 0}
+  playerMove: {fileID: 419210163}
   maxCoolDown: 2
 --- !u!114 &419210162
 MonoBehaviour:
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AddPower: 2
-  playerMove: {fileID: 0}
+  playerMove: {fileID: 419210163}
   dashMaxCoolDown: 2
 --- !u!114 &419210163
 MonoBehaviour:
@@ -433,9 +433,9 @@ MonoBehaviour:
   rangeSize: {x: 0, y: 0}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
-  rangeTransform: {fileID: 0}
-  rigidbody2D: {fileID: 0}
+    m_Bits: 128
+  rangeTransform: {fileID: 1406590902}
+  rigidbody2D: {fileID: 419210157}
   hpGauge: {fileID: 0}
   hpMax: 0
 --- !u!1 &449534272
