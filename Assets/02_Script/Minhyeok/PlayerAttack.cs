@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] Transform pos; // 충돌감지 상자 위치
-    [SerializeField] Vector2 boxSize; // 충돌감지 상자 크기
-    [SerializeField] float attackPower;
+    [SerializeField] private Transform pos; // 충돌감지 상자 위치
+    [SerializeField] private Vector2 boxSize; // 충돌감지 상자 크기
+    [SerializeField] private float attackPower;
 
     public float AttackPower { get; set; }
 
-    void Start()
-    {
-
-    }
     void Update()
     {
         Attack();

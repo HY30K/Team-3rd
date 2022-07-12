@@ -7,6 +7,7 @@ public class ObjectPooler : MonoBehaviour
 {
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private int poolSize;
+    private Dictionary<string, GameObject> prefabQueue = new Dictionary<string, GameObject>();
     private Dictionary<string, Stack<GameObject>> poolers = new Dictionary<string, Stack<GameObject>>();
 
     public Dictionary<string, Stack<GameObject>> Poolers => poolers;
@@ -17,6 +18,11 @@ public class ObjectPooler : MonoBehaviour
         {
             for (int j = 0; j < poolSize; j++)
             {
+                if (!prefabQueue.ContainsKey(prefabs[i].name))
+                {
+                    prefabQueue.Add(prefabs[i].name, prefabs[i]);
+                }
+
                 if (!poolers.ContainsKey(prefabs[i].name))
                 {
                     poolers.Add(prefabs[i].name, new Stack<GameObject>());
@@ -33,7 +39,7 @@ public class ObjectPooler : MonoBehaviour
 
     public GameObject SpawnPrefab(string key)
     {
-        GameObject prefab = null;
+        GameObject prefab;
 
         if (poolers[key].Count > 0)
         {
@@ -42,7 +48,7 @@ public class ObjectPooler : MonoBehaviour
         }
         else
         {
-            prefab = Instantiate(Resources.Load($"03_Prefab/{key}") as GameObject);
+            prefab = Instantiate(prefabQueue[key]);
             prefab.name = prefab.name.Replace("(Clone)", null);
         }
 
