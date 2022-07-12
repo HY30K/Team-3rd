@@ -244,13 +244,12 @@ GameObject:
   m_Component:
   - component: {fileID: 419210156}
   - component: {fileID: 419210155}
-  - component: {fileID: 419210154}
   - component: {fileID: 419210158}
   - component: {fileID: 419210157}
   - component: {fileID: 419210161}
   - component: {fileID: 419210160}
-  - component: {fileID: 419210159}
   - component: {fileID: 419210162}
+  - component: {fileID: 419210163}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -258,20 +257,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &419210154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 419210153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cdacf80c8aff745a5c0e7eced2a6ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rangePos: {fileID: 1406590902}
-  boxSize: {x: 1, y: 1}
 --- !u!212 &419210155
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -387,19 +372,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &419210159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 419210153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 991f7a5a6465a1941aa0e1538862c8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rangePos: {fileID: 1406590902}
 --- !u!114 &419210160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,7 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPrefab: {fileID: 2641867185902978557, guid: 83f273b8523532d4b95ff91bbb6d8256, type: 3}
   objectPooler: {fileID: 419210160}
-  playerMove: {fileID: 419210159}
+  playerMove: {fileID: 419210163}
   maxCoolDown: 2
 --- !u!114 &419210162
 MonoBehaviour:
@@ -444,8 +416,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AddPower: 2
-  playerMove: {fileID: 419210159}
+  playerMove: {fileID: 419210163}
   dashMaxCoolDown: 2
+--- !u!114 &419210163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419210153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a4299ac4aa8e84c9e458a0507bcad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeSize: {x: 0, y: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  rangeTransform: {fileID: 1406590902}
+  rigidbody2D: {fileID: 419210157}
+  hpGauge: {fileID: 0}
+  hpMax: 0
 --- !u!1 &449534272
 GameObject:
   m_ObjectHideFlags: 0
