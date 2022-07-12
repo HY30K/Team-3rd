@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 public class CoolDownUI : MonoBehaviour
 {
-    [SerializeField] Image fill;
-    [SerializeField] GameObject player;
-    float currentCoolDown;
+    [SerializeField] Image imageCoolDown;
+    [SerializeField] Player player;
 
     private void Update()
     {
-        if (gameObject.name == "Skill1UI")
+        if (gameObject.name == "ATKSkillDelay")
         {
-            fill.fillAmount = player.GetComponent<Skill1>().CurrentCoolDown / player.GetComponent<Skill1>().MaxCoolDown;
+            imageCoolDown.fillAmount = player.ATKSkillDelay / player.ATKSkillDelayMax;
         }
-        if(gameObject.name == "Skill2UI")
+        if(gameObject.name == "AGISkillDelay")
         {
-            fill.fillAmount = player.GetComponent<Skill2>().DashCurrentCoolDown / player.GetComponent<Skill2>().DashmaxCoolDown;
+            imageCoolDown.fillAmount = player.AGISkillDelay / player.AGISkillDelayMax;
         }
     }
 }
