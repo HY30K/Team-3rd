@@ -5,22 +5,34 @@ using TMPro;
 using DG.Tweening;
 public class AppearButton : MonoBehaviour
 {
-    public TextMeshProUGUI text;
-    private void OnGUI()
+    [SerializeField] TextMeshProUGUI text;
+    [SerializeField] TextMeshProUGUI text1;
+    [SerializeField] TextMeshProUGUI text2;
+    GameObject test;
+
+    private void Start()
     {
-        if (GUILayout.Button("Start"))
-        {
-            text.DOKill();
-            text.text = " ";
-            text.DOText("나는 김멸치..겜마고에 존재하는 17세 청소년이다..",6).SetEase(Ease.InSine);
-        }
+        Invoke("SetText", 8);
+        Invoke("SetText2", 15);
+        Invoke("SetText3", 22);
     }
-    void Start()
+    private void Update()
     {
-        
     }
-    void Update()
+    void SetText()
     {
-     
+        test = GameObject.Find("Text (TMP)");
+        test.SetActive(false);
     }
+    void SetText2()
+    {
+        test = GameObject.Find("Text (TMP) (1)");
+        test.SetActive(false);
+    }
+    void SetText3()
+    {
+        test = GameObject.Find("Text (TMP) (2)");
+        test.SetActive(false);
+    }
+    
 }
