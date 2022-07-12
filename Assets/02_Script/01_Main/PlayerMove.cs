@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private float speed = 0f;
+    [SerializeField] private PlayerStatus playerStatus;
     private Rigidbody2D rb2d = null;
+    private float x;
+    private float y;
+    private float agility;
+    private float agilityIncreaseDelay;
+
+    public float Agility { get; set; }
+
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -16,9 +23,20 @@ public class PlayerMove : MonoBehaviour
     }
     private void Move()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        x = Input.GetAxisRaw("Horizontal");
+        y = Input.GetAxisRaw("Vertical");
         Vector2 dir = new Vector2(x, y);
-        rb2d.velocity = dir.normalized * speed;
+        rb2d.velocity = dir.normalized * (0.5f + agility);
+
+        if (Mathf.Abs(x) > 0 || Mathf.Abs(y) > 0)
+        {
+            agilityIncreaseDelay += Time.deltaTime;
+
+            if (agilityIncreaseDelay >= 10.0f)
+            {
+                playerStatus.AgilityChange(true);
+                agilityIncreaseDelay = 0;
+            }
+        }
     }
 }

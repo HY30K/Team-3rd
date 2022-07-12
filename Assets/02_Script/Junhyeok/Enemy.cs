@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("적 속도")]
     [SerializeField] private float speed;
-    [SerializeField] private Vector2 range;
+    [SerializeField] LayerMask playerLayer = 1 << 7;
     private Collider2D col = null;
     private Rigidbody2D rb = null;
     private Animator animator;
@@ -26,33 +26,28 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        Target();
+
+        if (Physics2D.OverlapCircle(transform.position, 5f, playerLayer))
+        {
+            Target();
+        }
+        
         Move();
     }
 
     private void Target()
     {
-        if (Player.transform.position.x > transform.position.x)
+        dir = Player.transform.position - transform.position;
+
+        //플레이어없으면 위치 초기화
+        if (Player == null)
         {
-
-            dir = new Vector2(Player.transform.position.x - transform.position.x - 0.01f, 0);
-
-        }
-        else if (Player.transform.position.x < transform.position.x)
-        {
-
-            dir = new Vector2(Player.transform.position.x - transform.position.x + 0.01f, 0);
-        }
-        else if (Player == null)
-        {
-
             dir = Vector2.zero;
-
         }
     }
 
     private void Move()
     {
-        transform.Translate(dir * speed * Time.deltaTime);
+        transform.Translate(dir.normalized * speed * Time.deltaTime);
     }
 }
