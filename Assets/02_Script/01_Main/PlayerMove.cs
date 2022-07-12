@@ -11,6 +11,9 @@ public class PlayerMove : MonoBehaviour
     private float agility;
     private float agilityIncreaseDelay;
 
+    public float X => x;
+    public float Y => y;
+
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
