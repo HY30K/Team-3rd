@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
-public class SceneChange : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     [SerializeField] Image fadeout;
     [SerializeField] Image fadein;
