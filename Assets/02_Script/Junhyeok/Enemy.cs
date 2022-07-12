@@ -6,27 +6,30 @@ public class Enemy : MonoBehaviour, IDamage
 {
     [Header("적 속도")]
     [SerializeField] private float speed;
-    [SerializeField] private float maxHp;
+    [SerializeField] private float maxHP;
     [SerializeField] LayerMask playerLayer = 1 << 7;
-    private ObjectPooler enemyPooler;
-    private Collider2D col = null;
-    private Rigidbody2D rb = null;
-    private Animator animator;
+    private Collider2D col;
+    private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private ObjectPooler enemyPooler;
+    private Transform player;
+    private PlayerAttack playerAttack;
+    private PlayerMove playerMove;
     private Vector2 dir;
-    private float hp;
+    private float currentHP;
 
-    private Transform Player;
 
-    private void Awake()
+    private void OnEnable()
     {
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Player = GameObject.Find("Player").GetComponent<Transform>();
         enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
-        hp = maxHp;
+        player = GameObject.Find("Player").GetComponent<Transform>();
+        playerAttack = GameObject.Find("Player").GetComponent<PlayerAttack>();
+        playerMove = GameObject.Find("Player").GetComponent<PlayerMove>();
+        currentHP = maxHP;
+        dir = Vector2.zero;
     }
 
     private void Update()
@@ -37,14 +40,16 @@ public class Enemy : MonoBehaviour, IDamage
         }
         
         Move();
+
+        speed = playerMove.Agility;
     }
 
     private void Target()
     {
-        dir = Player.transform.position - transform.position;
+        dir = player.transform.position - transform.position;
 
         //플레이어없으면 위치 초기화
-        if (Player == null)
+        if (player == null)
         {
             dir = Vector2.zero;
         }
@@ -52,14 +57,14 @@ public class Enemy : MonoBehaviour, IDamage
 
     private void Move()
     {
-        transform.Translate(dir.normalized * speed * Time.deltaTime);
+        transform.Translate(dir.normalized * (0.5f + speed) * Time.deltaTime);
     }
 
     public void OnDamage(float damage)
     {
-        hp -= damage;
+        currentHP -= damage;
 
-        if (hp <= 0)
+        if (currentHP <= 0)
         {
             enemyPooler.DespawnPrefab(gameObject);
         }

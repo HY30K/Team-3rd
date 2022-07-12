@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHP : MonoBehaviour
+public class PlayerHP : MonoBehaviour, IDamage
 {
-    [SerializeField] private float MaxHP = 0f;
-    private float CurrentHP = 0f;
-    private Image HPGage = null;
+    [SerializeField] private float maxHp = 0f;
+    private Image hpGauge = null;
+    private float currentHp = 0f;
 
     private void Awake()
     {
-        CurrentHP = MaxHP;
-        HPGage = GameObject.Find("Canvas/Image").GetComponent<Image>();
+        currentHp = maxHp;
+        hpGauge = GameObject.Find("Canvas/Image").GetComponent<Image>();
     }
     private void Update()
     {
@@ -20,12 +20,15 @@ public class PlayerHP : MonoBehaviour
     }
     private void PlayerHp()
     {
-        HPGage.fillAmount = CurrentHP / MaxHP;
+        hpGauge.fillAmount = (float)currentHp / maxHp;
     }
     public void OnDamage(float damage)
     {
-        if (CurrentHP <= 0)
-            CurrentHP -= damage;
-        else { CurrentHP = 0; }
+        currentHp -= damage;
+
+        if (currentHp <= 0)
+        {
+            
+        }
     }
 }

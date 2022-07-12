@@ -14,15 +14,20 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Attack()
     {
+        Collider2D[] enemys = Physics2D.OverlapBoxAll(rangePos.position, boxSize, 0); //Enemy 태그 닿으면 데미지 -1
+
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Collider2D [] collider2D = Physics2D.OverlapBoxAll(rangePos.position, boxSize, 0); //Enemy 태그 닿으면 데미지 -1
-            foreach (Collider2D collider in collider2D)
+            foreach (Collider2D enemy in enemys)
             {
-                if(collider.tag == "Enemy")
+                if (enemy.tag == "Enemy")
                 {
-                    collider.GetComponent<IDamage>().OnDamage(0.5f + attackPower);
-                    attackPower += 0.2f;
+                    enemy.GetComponent<Enemy>().OnDamage(0.5f + attackPower);
+
+                    if (attackPower < 10.0f)
+                    {
+                        attackPower += 0.2f;
+                    }
                 }
             }
         }

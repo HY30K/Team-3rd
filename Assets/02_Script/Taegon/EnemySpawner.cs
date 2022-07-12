@@ -22,5 +22,7 @@ public class EnemySpawner : MonoBehaviour
         enemy.transform.position = new Vector2(x, y);
 
         yield return new WaitForSeconds(enemySpawnDelay);
+
+        StartCoroutine("EnemySpawn");
     }
 }

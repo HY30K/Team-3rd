@@ -11,6 +11,8 @@ public class PlayerMove : MonoBehaviour
     private float agility;
     private float agilityIncreaseDelay;
 
+    public float Agility => agility;
+
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -33,7 +35,11 @@ public class PlayerMove : MonoBehaviour
 
             if (agilityIncreaseDelay >= 5.0f)
             {
-                agility += 0.2f;
+                if (agility < 10.0f)
+                {
+                    agility += 0.2f;
+                }
+
                 agilityIncreaseDelay = 0;
             }
         }
