@@ -5,16 +5,18 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamage
 {
     [SerializeField] private Vector2 attackRangeSize;
-    [SerializeField] private Vector2 detectRangeSize;
+    [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Transform attackRangeTransform;
     [SerializeField] private Transform detectRangeTransform;
     [SerializeField] private Rigidbody2D rigidbody2D;
+    [SerializeField] private float detectRangeSize;
     [SerializeField] private float hpMax;
-    private Vector2 moveDirection;
+    [SerializeField] private Vector2 moveDirection;
     private GameObject playerObject;
     private Player playerScript;
     private ObjectPooler enemyPooler;
     private float atk;
+    private float atkDelay;
     private float agi;
     private float hpCurrent;
 
@@ -31,78 +33,62 @@ public class Enemy : MonoBehaviour, IDamage
         hpCurrent = hpMax;
     }
 
+    private void Update()
+    {
+        ATK();
+        AGI();
+
+        atk = playerScript.Atk;
+        agi = playerScript.Agi;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(attackRangeTransform.position, attackRangeSize);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize);
+    }
+
+    private void ATK()
+    {
+        atkDelay += Time.deltaTime;
+
+        if (atkDelay >= 6.0f - atk / 2.0f)
+        {
+            if (Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
+            {
+                Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
+
+                player.GetComponent<Player>().OnDamage(0.5f + atk);
+
+                atkDelay = 0.0f;
+            }
+        }
+    }
+
+    private void AGI()
+    {
+        if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
+        {
+            moveDirection = playerObject.transform.position - transform.position;
+        }
+        else
+        {
+            moveDirection = Vector2.zero;
+        }
+
+        transform.Translate(moveDirection.normalized * (0.5f + agi) * Time.deltaTime);
+        attackRangeTransform.localPosition = moveDirection.normalized;
+    }
+
     public void OnDamage(float damage)
     {
         hpCurrent -= damage;
 
-        if (hpCurrent <= 0)
+        if (hpCurrent <= 0.001f)
         {
             enemyPooler.DespawnPrefab(gameObject);
         }
     }
-    /*[Header("적 속도")]
-    [SerializeField] private float speed;
-    [SerializeField] private float maxHP;
-    [SerializeField] LayerMask playerLayer = 1 << 7;
-    private Collider2D col;
-    private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
-    private ObjectPooler enemyPooler;
-    private Transform player;
-    private PlayerAttack playerAttack;
-    private PlayerMove playerMove;
-    private Vector2 dir;
-    private float currentHP;
-
-
-    private void OnEnable()
-    {
-        col = GetComponent<Collider2D>();
-        rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
-        player = GameObject.Find("Player").GetComponent<Transform>();
-        playerAttack = GameObject.Find("Player").GetComponent<PlayerAttack>();
-        playerMove = GameObject.Find("Player").GetComponent<PlayerMove>();
-        currentHP = maxHP;
-        dir = Vector2.zero;
-    }
-
-    private void Update()
-    {
-        if (Physics2D.OverlapCircle(transform.position, 5f, playerLayer))
-        {
-            Target();
-        }
-        
-        Move();
-
-        speed = playerMove.Agility;
-    }
-
-    private void Target()
-    {
-        dir = player.transform.position - transform.position;
-
-        //플레이어없으면 위치 초기화
-        if (player == null)
-        {
-            dir = Vector2.zero;
-        }
-    }
-
-    private void Move()
-    {
-        transform.Translate(dir.normalized * (0.5f + speed) * Time.deltaTime);
-    }
-
-    public void OnDamage(float damage)
-    {
-        currentHP -= damage;
-
-        if (currentHP <= 0)
-        {
-            enemyPooler.DespawnPrefab(gameObject);
-        }
-    }*/
 }

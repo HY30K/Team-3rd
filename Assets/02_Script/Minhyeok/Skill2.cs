@@ -6,7 +6,7 @@ using DG.Tweening;
 public class Skill2 : MonoBehaviour
 {
     [SerializeField] float AddPower;
-    [SerializeField] PlayerMove playerMove;
+    [SerializeField] Player player;
     [SerializeField] private float dashMaxCoolDown = 2;
     float dashCurrentCoolDown;
     Rigidbody2D rigid;
@@ -27,9 +27,9 @@ public class Skill2 : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (playerMove.X != 0 || playerMove.Y != 0)
+                if (player.MoveDirection.x != 0 || player.MoveDirection.y != 0)
                 {
-                    transform.DOLocalMove(new Vector3(playerMove.X * 2, playerMove.Y * 2), 0.3f).SetRelative();
+                    transform.DOLocalMove(new Vector3(player.MoveDirection.x * 2, player.MoveDirection.y * 2), 0.3f).SetRelative();
                     dashCurrentCoolDown = dashMaxCoolDown;
                 }
             }

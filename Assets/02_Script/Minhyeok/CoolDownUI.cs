@@ -8,7 +8,6 @@ public class CoolDownUI : MonoBehaviour
     [SerializeField] Image fill;
     [SerializeField] GameObject player;
     float currentCoolDown;
-    bool useSkill = false;
 
     private void Update()
     {

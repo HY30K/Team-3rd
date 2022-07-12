@@ -133,10 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 553340463}
   - component: {fileID: 553340462}
-  - component: {fileID: 553340461}
   - component: {fileID: 553340460}
   - component: {fileID: 553340459}
-  - component: {fileID: 553340458}
+  - component: {fileID: 553340464}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -144,19 +143,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &553340458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 553340457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 991f7a5a6465a1941aa0e1538862c8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rangePos: {fileID: 1764308601}
 --- !u!50 &553340459
 Rigidbody2D:
   serializedVersion: 4
@@ -204,20 +190,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &553340461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 553340457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cdacf80c8aff745a5c0e7eced2a6ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rangePos: {fileID: 1764308601}
-  boxSize: {x: 1, y: 1}
 --- !u!212 &553340462
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -286,6 +258,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &553340464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553340457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a4299ac4aa8e84c9e458a0507bcad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeSize: {x: 1, y: 1}
+  rangeTransform: {fileID: 1764308601}
+  rigidbody2D: {fileID: 553340459}
+  hpGauge: {fileID: 0}
+  hpMax: 0
 --- !u!1 &1478091527
 GameObject:
   m_ObjectHideFlags: 0
