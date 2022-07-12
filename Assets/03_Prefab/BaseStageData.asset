@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e3ea2ea55ee27344ac0afa358c00b61, type: 3}
-  m_Name: TestStageData
+  m_Name: BaseStageData
   m_EditorClassIdentifier: 
   limitMin: {x: -9.4, y: -5.5}
   limitMax: {x: 9.4, y: 5.5}
