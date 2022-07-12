@@ -169,12 +169,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRangeSize: {x: 1, y: 1}
+  attackRangeTransform: {fileID: 8959924495300212949}
+  atkDelayMax: 6
+  moveDirection: {x: 0, y: 0}
+  detectRangeTransform: {fileID: 3079011549060383829}
+  detectRangeSize: 2
+  hpMax: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  attackRangeTransform: {fileID: 8959924495300212949}
-  detectRangeTransform: {fileID: 3079011549060383829}
-  rigidbody2D: {fileID: 4599999848279769912}
-  detectRangeSize: 2
-  hpMax: 10
-  moveDirection: {x: 0, y: 0}

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Skill1 : MonoBehaviour
 {
-    [SerializeField] GameObject skillPrefab;
-    //[SerializeField] GameObject particle;
     [SerializeField] ObjectPooler objectPooler;
     [SerializeField] Player player;
     [SerializeField] private float maxCoolDown = 2;

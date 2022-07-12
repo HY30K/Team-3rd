@@ -5,11 +5,9 @@ using DG.Tweening;
 
 public class Skill2 : MonoBehaviour
 {
-    [SerializeField] float AddPower;
     [SerializeField] Player player;
     [SerializeField] private float dashMaxCoolDown = 2;
     float dashCurrentCoolDown;
-    Rigidbody2D rigid;
 
     public float DashmaxCoolDown => dashMaxCoolDown; 
     public float DashCurrentCoolDown => dashCurrentCoolDown;

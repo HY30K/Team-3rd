@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4128656036417780173}
   - component: {fileID: -4871105205248656984}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Fireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
