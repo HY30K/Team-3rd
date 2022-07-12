@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] new GameObject audio = null;
     AudioSource source;
     bool isOpen = false;
+    bool isOther = false;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (isOpen == false && Input.GetKeyDown(KeyCode.Escape))
+        if (isOpen == false && isOther == false && Input.GetKeyDown(KeyCode.Escape))
         {
             Option();
         }
@@ -30,15 +31,37 @@ public class UIManager : MonoBehaviour
         {
             Close();
         }
+        if (isOther == true && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isOpen = false;
+            Back();
+        }
+        if (isOther == true)
+        {
+            isOpen = false;
+        }
+
+
         if (isOpen == true)
         {
             Time.timeScale = 0;
         }
-        else
+        else if (isOther == true)
         {
-            Time.timeScale = 1;
+            Time.timeScale = 0;
         }
-
+        else if (isOpen == true && isOther == false)
+        {
+            Time.timeScale = 0;
+        }
+        //else if (isOpen == false)
+        //{
+        //    Time.timeScale = 1;
+        //}
+        //else if (isOpen == false &&  isOther == false)
+        //{
+        //    Time.timeScale = 1;
+        //}
     }
     private void OnEnable()
     {
@@ -56,7 +79,7 @@ public class UIManager : MonoBehaviour
         fadeout.DOFade(1, 1f).OnComplete(() =>
         {
             SceneManager.LoadScene(sceneName);
-        });
+        }).SetUpdate(true);
     }
     //게임 종료
     public void Quit()
@@ -83,15 +106,23 @@ public class UIManager : MonoBehaviour
         hideMap.gameObject.SetActive(true);
 
         sound.gameObject.SetActive(true);
+        isOther = true;
     }
     //사운드설정 닫기
     public void Back()
     {
         source.Play();
 
-        hideMap.gameObject.SetActive(false);
-
         sound.gameObject.SetActive(false);
+        if (isOpen == true)
+        {
+            hideMap.gameObject.SetActive(true);
+        }
+        else
+        {
+            hideMap.gameObject.SetActive(false);
+        }
+        isOther = false;
     }
     //설정창 닫기 
     public void Close()
