@@ -1,28 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using TMPro;
-public class AppearText : MonoBehaviour
+using DG.Tweening;
+public class AppearButton : MonoBehaviour
 {
-    [SerializeField] string Text;
-   [SerializeField] float duration;
     public TextMeshProUGUI text;
-    void Start()
-    {
-
-    }
-    void Update()
-    {
-        
-    }
     private void OnGUI()
     {
         if (GUILayout.Button("Start"))
         {
             text.DOKill();
             text.text = " ";
-            text.DOText(Text,duration);
+            text.DOText("나는 김멸치..겜마고에 존재하는 17세 청소년이다..",6).SetEase(Ease.InSine);
         }
+    }
+    void Start()
+    {
+        
+    }
+    void Update()
+    {
+     
     }
 }
