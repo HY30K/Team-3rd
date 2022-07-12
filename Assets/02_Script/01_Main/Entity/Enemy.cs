@@ -4,7 +4,43 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamage
 {
-    [Header("利 加档")]
+    [SerializeField] private Vector2 attackRangeSize;
+    [SerializeField] private Vector2 detectRangeSize;
+    [SerializeField] private Transform attackRangeTransform;
+    [SerializeField] private Transform detectRangeTransform;
+    [SerializeField] private Rigidbody2D rigidbody2D;
+    [SerializeField] private float hpMax;
+    private Vector2 moveDirection;
+    private GameObject playerObject;
+    private Player playerScript;
+    private ObjectPooler enemyPooler;
+    private float atk;
+    private float agi;
+    private float hpCurrent;
+
+    private void Awake()
+    {
+        playerObject = GameObject.Find("Player");
+        playerScript = playerObject.GetComponent<Player>();
+        enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+    }
+
+    private void OnEnable()
+    {
+        moveDirection = Vector2.zero;
+        hpCurrent = hpMax;
+    }
+
+    public void OnDamage(float damage)
+    {
+        hpCurrent -= damage;
+
+        if (hpCurrent <= 0)
+        {
+            enemyPooler.DespawnPrefab(gameObject);
+        }
+    }
+    /*[Header("利 加档")]
     [SerializeField] private float speed;
     [SerializeField] private float maxHP;
     [SerializeField] LayerMask playerLayer = 1 << 7;
@@ -68,5 +104,5 @@ public class Enemy : MonoBehaviour, IDamage
         {
             enemyPooler.DespawnPrefab(gameObject);
         }
-    }
+    }*/
 }
