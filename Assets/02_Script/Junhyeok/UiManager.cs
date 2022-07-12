@@ -14,10 +14,22 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image sound = null;
     [SerializeField] new GameObject audio = null;
     AudioSource source;
+    bool isOpen = false;
 
     private void Awake()
     {
         source = audio.GetComponent<AudioSource>();
+    }
+    private void Update()
+    {
+        if (isOpen == false && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Option();
+        }
+        else if (isOpen == true && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Close();
+        }
     }
     private void OnEnable()
     {
@@ -52,6 +64,7 @@ public class UIManager : MonoBehaviour
 
         option.gameObject.SetActive(true);
         option.gameObject.transform.DOScale(1, 1);
+        isOpen = true;
     }
     //사운드설정 열기
     public void Sound()
@@ -75,6 +88,7 @@ public class UIManager : MonoBehaviour
     public void Close()
     {
         StartCoroutine(CloseWindow());
+        isOpen = false;
     }
     IEnumerator CloseWindow()
     {

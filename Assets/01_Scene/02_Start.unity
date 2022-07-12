@@ -448,7 +448,7 @@ MonoBehaviour:
   m_text: "\uC18C\uB9AC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -913,7 +913,7 @@ MonoBehaviour:
     \uC774\uC124\uC544, \uC774\uD0DC\uACE4, \uD64D\uBBFC\uD601, \uD64D\uC900\uD601"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1483,7 +1483,7 @@ MonoBehaviour:
   m_text: "\uC870\uC791\uD0A4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1615,10 +1615,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBA78 To \uD5EC"
+  m_text: "\uBA78 TO \uD5EC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2037,7 +2037,7 @@ MonoBehaviour:
     : \uC624\uB978\uCABD\uC774\uB3D9\t\tLSHIFT : \uB300\uC26C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: 7234617258762803188, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -601,7 +601,7 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 1021066037, guid: a11ea103d81f8dd4b896a5dcd08d3fcc, type: 3}
+    m_PressedSprite: {fileID: 1707220091, guid: a11ea103d81f8dd4b896a5dcd08d3fcc, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -647,7 +647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1095068411, guid: a11ea103d81f8dd4b896a5dcd08d3fcc, type: 3}
+  m_Sprite: {fileID: -2025359318, guid: a11ea103d81f8dd4b896a5dcd08d3fcc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_text: "\uC18C\uB9AC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
-  m_sharedMaterial: {fileID: -3282918425946353055, guid: 0038f0f568748484a89737383af2b7cd, type: 2}
+  m_sharedMaterial: {fileID: -6028505683071711473, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
