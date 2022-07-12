@@ -12,7 +12,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image option = null;
     [SerializeField] Image hideMap = null;
     [SerializeField] Image sound = null;
+    [SerializeField] new GameObject audio = null;
+    AudioSource source;
+    bool isOpen = false;
 
+    private void Awake()
+    {
+        source = audio.GetComponent<AudioSource>();
+    }
+    private void Update()
+    {
+        if (isOpen == false && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Option();
+        }
+        else if (isOpen == true && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Close();
+        }
+    }
     private void OnEnable()
     {
         /*option.rectTransform.localScale = new Vector3(0, 0, 0);
@@ -24,6 +42,8 @@ public class UIManager : MonoBehaviour
     //씬 불러오기
     public void SceneLoader(string sceneName)
     {
+        source.Play();
+
         fadeout.DOFade(1, 1f).OnComplete(() =>
         {
             SceneManager.LoadScene(sceneName);
@@ -32,20 +52,25 @@ public class UIManager : MonoBehaviour
     //게임 종료
     public void Quit()
     {
+        source.Play();
         //Application.Quit();
         Debug.Log("Quit");
     }
     //설정창 열기
     public void Option()
     {
+        source.Play();
         hideMap.gameObject.SetActive(true);
 
         option.gameObject.SetActive(true);
         option.gameObject.transform.DOScale(1, 1);
+        isOpen = true;
     }
     //사운드설정 열기
     public void Sound()
     {
+        source.Play();
+
         hideMap.gameObject.SetActive(true);
 
         sound.gameObject.SetActive(true);
@@ -53,6 +78,8 @@ public class UIManager : MonoBehaviour
     //사운드설정 닫기
     public void Back()
     {
+        source.Play();
+
         hideMap.gameObject.SetActive(false);
 
         sound.gameObject.SetActive(false);
@@ -61,9 +88,12 @@ public class UIManager : MonoBehaviour
     public void Close()
     {
         StartCoroutine(CloseWindow());
+        isOpen = false;
     }
     IEnumerator CloseWindow()
     {
+        source.Play();
+
         hideMap.gameObject.SetActive(false);
 
         option.gameObject.transform.DOScale(0, 0.6f);

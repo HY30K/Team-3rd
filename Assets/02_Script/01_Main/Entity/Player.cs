@@ -6,18 +6,36 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour, IDamage
 {
+    public static Player instance;
+
     [SerializeField] private Vector2 rangeSize;
+    [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private Rigidbody2D rigidbody2D;
     [SerializeField] private Image hpGauge;
     [SerializeField] private float hpMax;
+    private Vector2 moveDirection;
     private float atk;
+    private float atkDelay;
     private float agi;
     private float agiDelay;
     private float hpCurrent;
 
+    public Vector2 MoveDirection => moveDirection;
+    public float Atk => atk;
+    public float Agi => agi;
+
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         hpCurrent = hpMax;
     }
 
@@ -36,35 +54,34 @@ public class Player : MonoBehaviour, IDamage
 
     private void ATK()
     {
-        Collider2D[] enemys = Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0);
+        atkDelay += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (atkDelay >= 3.0f - atk / 4.0f && Input.GetKeyDown(KeyCode.K))
         {
-            foreach (Collider2D enemy in enemys)
+            foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
-                if (enemy.CompareTag("Enemy"))
-                {
-                    enemy.GetComponent<Enemy>().OnDamage(0.2f + atk);
+                enemy.GetComponent<Enemy>().OnDamage(1.0f + atk);
 
-                    if (atk < 10.0f)
-                    {
-                        atk += 0.2f;
-                    }
-                    else
-                    {
-                        atk = 10.0f;
-                        //스킬 성장으로 전환
-                    }
+                if (atk < 10.0f)
+                {
+                    atk += 0.2f;
+                }
+                else
+                {
+                    atk = 10.0f;
+                    //스킬 성장으로 전환
                 }
             }
+
+            atkDelay = 0.0f;
         }
     }
 
     private void AGI()
     {
-        Vector2 moveDirection = new Vector2(Input.GetAxis("Horzontal"), Input.GetAxis("Vertical"));
+        moveDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         rangeTransform.localPosition = moveDirection;
-        rigidbody2D.velocity = moveDirection.normalized * (0.2f + agi);
+        transform.Translate(moveDirection.normalized * (1.0f + agi) * Time.deltaTime);
 
         if (moveDirection.x != 0 || moveDirection.y != 0)
         {
@@ -83,7 +100,7 @@ public class Player : MonoBehaviour, IDamage
                 //스킬 성장으로 전환
             }
 
-            agiDelay = 0;
+            agiDelay = 0.0f;
         }
     }
 
@@ -96,7 +113,7 @@ public class Player : MonoBehaviour, IDamage
     {
         hpCurrent -= damage;
 
-        if (hpCurrent <= 0)
+        if (hpCurrent <= 0.001f)
         {
             SceneManager.LoadScene("03_GameOver");
         }

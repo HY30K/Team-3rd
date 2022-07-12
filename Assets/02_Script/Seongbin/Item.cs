@@ -23,7 +23,7 @@ public class Item : MonoBehaviour
     {
         if (Physics2D.OverlapCircle(transform.position, 3, 1 << 7) != null && itemGet)
         {
-            transform.position = Vector2.MoveTowards(transform.position, GameManager.instance.player.transform.position, followSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, followSpeed * Time.deltaTime);
             if (Physics2D.OverlapCircle(transform.position, 0.2f, 1 << 7) != null)
             {
                 GetItem();
