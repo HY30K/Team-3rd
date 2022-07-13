@@ -8,7 +8,13 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
-
+    [SerializeField] Animator anim;
+    public enum LayerName
+    {
+        IdleLayer =0,
+        WalkLayer =1,
+        AttackLayer=2
+    }
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 rangeSize;
@@ -80,6 +86,7 @@ public class Player : MonoBehaviour, IDamage
         punch = gameObject.GetComponent<AudioSource>();
         skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
         dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
 
         if (instance == null)
         {
@@ -102,6 +109,7 @@ public class Player : MonoBehaviour, IDamage
         StatusGauge();
         StatusDelay();
         StatusLimit();
+        HandleLayers();
 
         if (atkLevel == 10)
         {
@@ -177,6 +185,31 @@ public class Player : MonoBehaviour, IDamage
 
             agiDelay = agiDelayMax;
         }
+    }
+    public void HandleLayers()
+    {
+        if(moveDirection.x != 0 || moveDirection.y != 0)
+        {
+            ActivateLayer(LayerName.WalkLayer);
+            anim.SetFloat("x",moveDirection.x);
+            anim.SetFloat("y",moveDirection.y);
+        }
+        //else if(moveDirection.x <=0.1 || moveDirection.y <=0.1)
+        //{
+        //    ActivateLayer(LayerName.AttackLayer);
+        //}
+        else
+        {
+            ActivateLayer(LayerName.IdleLayer);
+        }
+    }
+    public void ActivateLayer(LayerName layerName)
+    {
+        for(int i =0; i < anim.layerCount; i++)
+        {
+            anim.SetLayerWeight(1, 0);
+        }
+        anim.SetLayerWeight((int)layerName, 1);
     }
 
     private void HP()
