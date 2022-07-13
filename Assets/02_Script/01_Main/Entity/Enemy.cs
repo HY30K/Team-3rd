@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] private float atkDelayMax;
     private float atk;
     private float atkDelay;
+    AudioSource attacked;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour, IDamage
     {
         playerObject = GameObject.Find("Player");
         enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        attacked = GameObject.Find("PunchSound").GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -91,7 +93,7 @@ public class Enemy : MonoBehaviour, IDamage
     public void OnDamage(float damage)
     {
         hpCurrent -= damage;
-
+        attacked.Play();
         if (hpCurrent <= 0.001f)
         {
             enemyPooler.DespawnPrefab(gameObject);

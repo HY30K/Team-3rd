@@ -16,6 +16,9 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
+    AudioSource punch;
+    AudioSource dash;
+    AudioSource skill;
     private int atkLevel;
     public int ATKLevel
     {
@@ -84,6 +87,9 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
+        punch = gameObject.GetComponent<AudioSource>();
+        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
+        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -132,7 +138,9 @@ public class Player : MonoBehaviour, IDamage
                 }
             }
 
-            //atkDelay = atkDelayMax;
+            punch.Play();
+            atkDelay = atkDelayMax;
+
         }
     }
 
@@ -185,6 +193,7 @@ public class Player : MonoBehaviour, IDamage
             }
 
             atkSkillDelay = atkSkillDelayMax;
+            skill.Play();
         }
     }
 
@@ -199,7 +208,8 @@ public class Player : MonoBehaviour, IDamage
             //yield return new WaitForSeconds(0.1f);
 
             agiSkillDelay = agiSkillDelayMax;
-           // StartCoroutine("Dash");
+            //StartCoroutine("Dash");
+            dash.Play();
         }
     }
 
