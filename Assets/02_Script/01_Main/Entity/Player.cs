@@ -141,7 +141,7 @@ public class Player : MonoBehaviour, IDamage
                 }
             }
 
-            //atkDelay = atkDelayMax;
+            atkDelay = atkDelayMax;
         }
     }
 
