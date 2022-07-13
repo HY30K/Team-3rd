@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour, IDamage
     [Header("플레이어 관련 변수")]
     [SerializeField] private LayerMask playerLayer;
     private GameObject playerObject;
+    [SerializeField] private Animator anim;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     #endregion
 
     private void Awake()
@@ -47,6 +49,15 @@ public class Enemy : MonoBehaviour, IDamage
     {
         ATK();
         AGI();
+
+        if (playerObject.transform.position.x < transform.position.x)
+        {
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            spriteRenderer.flipX = false;
+        }
     }
 
     private void OnDrawGizmos()
@@ -63,11 +74,15 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (atkDelay <= 0.001f && Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
         {
+            anim.SetTrigger("lsAttack");
+
             Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
 
             player.GetComponent<Player>().OnDamage(0.5f + atk);
 
+
             atkDelay = atkDelayMax;
+
         }
     }
 
@@ -78,10 +93,15 @@ public class Enemy : MonoBehaviour, IDamage
             moveDirection = playerObject.transform.position - transform.position;
 
             moveDirection.Normalize();
+
+            anim.SetBool("lsWalk", true);
+            
+
         }
         else
         {
             moveDirection = Vector2.zero;
+            anim.SetBool("lsIdle", true);
         }
 
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
@@ -93,6 +113,7 @@ public class Enemy : MonoBehaviour, IDamage
         hpCurrent -= damage;
         if (hpCurrent <= 0.001f)
         {
+            anim.SetTrigger("lsDeath");
             enemyPooler.DespawnPrefab(gameObject);
         }
     }
