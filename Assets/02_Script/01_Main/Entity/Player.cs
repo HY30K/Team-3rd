@@ -99,7 +99,10 @@ public class Player : MonoBehaviour, IDamage
         {
             ATKSkill();
         }
+    }
 
+    private void FixedUpdate()
+    {
         if (agiLevel == 10)
         {
             AGISkill();
@@ -138,6 +141,8 @@ public class Player : MonoBehaviour, IDamage
 
     private void AGI()
     {
+        agiSkillDelay -= Time.deltaTime;
+
         moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
@@ -182,17 +187,15 @@ public class Player : MonoBehaviour, IDamage
                 prefab.transform.position = transform.position;
 
                 prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
-            }
 
-            atkSkillDelay = atkSkillDelayMax;
+                atkSkillDelay = atkSkillDelayMax;
+            }
         }
     }
 
     private void AGISkill()
     {
-        agiSkillDelay -= Time.deltaTime;
-
-        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift))
+        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
             agiSkillDelay = agiSkillDelayMax;
