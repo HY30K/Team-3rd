@@ -51,9 +51,9 @@ public class StageChange : MonoBehaviour
             case ChangeStage.shop:
                 GameObject.Find("Player").transform.position = shopTarget.transform.position;
                 break;
-            case ChangeStage.boss:
+            /*case ChangeStage.boss:
                 GameObject.Find("Player").transform.position = bossStageTarget.transform.position;
-                break;
+                break;*/
             default:
                 break;
         }
