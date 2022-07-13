@@ -16,11 +16,12 @@ public class ShopItem : InteractObj
     public GameObject Image;
     public GameObject itemPrefab;
 
-    
-
     private enum ItemType
     {
-        Protein
+        Protein,
+        Chicken,
+        Energybar,
+        Water
     }
     void Start()
     {
@@ -61,6 +62,15 @@ public class ShopItem : InteractObj
                 case ItemType.Protein:
                     itemScript.itemType = Item.ItemType.Protein;
                     break;
+                case ItemType.Chicken:
+                    itemScript.itemType = Item.ItemType.Chicken;
+                    break;
+                case ItemType.Energybar:
+                    itemScript.itemType = Item.ItemType.Energybar;
+                    break;
+                case ItemType.Water:
+                    itemScript.itemType = Item.ItemType.Water;
+                    break;
                 default:
                     break;
             }
@@ -69,5 +79,28 @@ public class ShopItem : InteractObj
             return true;
         }
         return false;
+    }
+    private void Update()
+    {
+        ItemViewer itemScript = Image.GetComponent<ItemViewer>();
+
+        switch (itemType)
+        {
+            case ItemType.Protein:
+                itemScript.itemType = ItemViewer.ItemType.Protein;
+                break;
+            case ItemType.Chicken:
+                itemScript.itemType = ItemViewer.ItemType.Chicken;
+                break;
+            case ItemType.Energybar:
+                itemScript.itemType = ItemViewer.ItemType.Energybar;
+                break;
+            case ItemType.Water:
+                itemScript.itemType = ItemViewer.ItemType.Water;
+                break;
+            default:
+                break;
+        }
+        itemScript.ItemViewers();
     }
 }

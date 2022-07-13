@@ -3327,7 +3327,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
-  atkGauge: {fileID: 0}
+  atkGauge: {fileID: 1172528754}
   rangeTransform: {fileID: 866780049}
   atkMax: 10
   atkDelayMax: 3
@@ -4061,6 +4061,9 @@ MonoBehaviour:
   option: {fileID: 1805016117}
   hideMap: {fileID: 142581345}
   sound: {fileID: 2035788035}
+  inform: {fileID: 1588609638}
+  key: {fileID: 1588609638}
+  gauge: {fileID: 1588609638}
   audio: {fileID: 867928434}
 --- !u!1 &519420028
 GameObject:

@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image hideMap = null;
     [SerializeField] Image sound = null;
     [SerializeField] Image inform = null;
-    [SerializeField] Image Key = null;
+    [SerializeField] Image key = null;
     [SerializeField] Image gauge = null;
     [SerializeField] new GameObject audio = null;
     AudioSource source;
@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
         {
             Close();
         }
-        if (isOther == true && Input.GetKeyDown(KeyCode.Escape))
+/*        if (isOther == true && Input.GetKeyDown(KeyCode.Escape))
         {
             isOpen = false;
             Back();
@@ -42,20 +42,20 @@ public class UIManager : MonoBehaviour
         if (isOther == true)
         {
             isOpen = false;
-        }
+        }*/
 
 
         if (isOpen == true)
         {
             Time.timeScale = 0;
         }
-        else if (isOther == true)
+        else if (isOpen == true)
         {
             Time.timeScale = 0;
         }
-        else if (isOpen == true && isOther == false)
+        else
         {
-            Time.timeScale = 0;
+            Time.timeScale = 1;
         }
         //else if (isOpen == false)
         //{
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
 
         hideMap.gameObject.SetActive(false);
 
-        option.gameObject.transform.DOScale(0, 0.6f);
+        option.gameObject.transform.DOScale(0, 0.6f).SetUpdate(true);
         yield return new WaitForSeconds(0.4f);
         option.gameObject.SetActive(false);
     }
@@ -147,15 +147,12 @@ public class UIManager : MonoBehaviour
         hideMap.gameObject.SetActive(true);
 
         inform.gameObject.SetActive(true);
-        option.gameObject.transform.DOScale(1, 1).SetUpdate(true);
-
-        isOther = true;
+        inform.gameObject.transform.DOScale(1, 1).SetUpdate(true);
     }
     //정보 선택창 닫기
     public void Close2()
     {
         StartCoroutine(CloseWindow2());
-        isOpen = false;
     }
     IEnumerator CloseWindow2()
     {
@@ -163,8 +160,46 @@ public class UIManager : MonoBehaviour
 
         hideMap.gameObject.SetActive(false);
 
-        inform.gameObject.transform.DOScale(0, 0.6f);
+        inform.gameObject.transform.DOScale(0, 0.6f).SetUpdate(true);
         yield return new WaitForSeconds(0.4f);
         inform.gameObject.SetActive(false);
+    }
+    //______________________________________________________________________________________
+    //조작키설정 열기
+    public void Key()
+    {
+        source.Play();
+
+        key.gameObject.SetActive(true);
+
+        isOther = true;
+    }
+    //조작키설정 닫기
+    public void CloseKey()
+    {
+        source.Play();
+
+        key.gameObject.SetActive(false);
+
+        isOther = false;
+    }
+    //______________________________________________________________________________________
+    //UI안내 열기
+    public void Gauge()
+    {
+        source.Play();
+
+        gauge.gameObject.SetActive(true);
+
+        isOther = true;
+    }
+    //UI안내 닫기
+    public void CloseGauge()
+    {
+        source.Play();
+
+        gauge.gameObject.SetActive(false);
+
+        isOther = false;
     }
 }

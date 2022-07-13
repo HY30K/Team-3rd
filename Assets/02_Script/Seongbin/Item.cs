@@ -5,16 +5,17 @@ using System;
 
 public class Item : MonoBehaviour
 {
-    private GameObject player;
     public enum ItemType
     {
-        Protein
+        Protein,
+        Chicken,
+        Energybar,
+        Water
     }
     public ItemType itemType;
     Rigidbody2D rig;
     public SpriteRenderer spriteRenderer;
     public float followSpeed;
-    private bool itemGet = false;
     public float power;
 
     [SerializeField] private List<Sprite> itemIamge = new List<Sprite>();
@@ -29,24 +30,26 @@ public class Item : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-                GetItem();
-                Destroy(gameObject, 0.75f);
+            GetItem();
+            Destroy(gameObject, 0.75f);
         }
     }
-    private void GetItem()
+    private void GetItem()//statup
     {
         switch (itemType)
         {
             case ItemType.Protein:
-                //stat up
                 break;
+            case ItemType.Chicken:
+                break;
+            case ItemType.Energybar:
+                break;
+            case ItemType.Water:
+                break;
+            //stat up
             default:
                 break;
         }
-    }
-    private void canGetItem()
-    {
-        itemGet = true;
     }
     public void ItemSet()
     {
@@ -54,6 +57,15 @@ public class Item : MonoBehaviour
         {
             case ItemType.Protein:
                 spriteRenderer.sprite = itemIamge[0];
+                break;
+            case ItemType.Chicken:
+                spriteRenderer.sprite = itemIamge[1];
+                break;
+            case ItemType.Energybar:
+                spriteRenderer.sprite = itemIamge[2];
+                break;
+            case ItemType.Water:
+                spriteRenderer.sprite = itemIamge[3];
                 break;
             default:
                 break;

@@ -126,6 +126,9 @@ MonoBehaviour:
   power: 20
   itemIamge:
   - {fileID: 21300000, guid: 3f364f581fb40c1448e52f993bbfc9bd, type: 3}
+  - {fileID: 21300000, guid: d409ffdef23a2084683e8715a716faab, type: 3}
+  - {fileID: 21300000, guid: f65c71908248b01469433a2e1f53d269, type: 3}
+  - {fileID: 21300000, guid: 48cfae5be41c71e4ea534983b2416f18, type: 3}
 --- !u!61 &-9011169435167223166
 BoxCollider2D:
   m_ObjectHideFlags: 0
