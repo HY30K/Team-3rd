@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour, IDamage
         else
         {
             moveDirection = Vector2.zero;
-            anim.SetBool("lsWalk", false);
+            anim.SetBool("lsIdle", true);
         }
 
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
