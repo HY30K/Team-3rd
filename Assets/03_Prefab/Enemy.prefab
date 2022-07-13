@@ -173,7 +173,7 @@ MonoBehaviour:
   atkDelayMax: 6
   moveDirection: {x: 0, y: 0}
   detectRangeTransform: {fileID: 3079011549060383829}
-  detectRangeSize: 2
+  detectRangeSize: 7
   hpMax: 10
   playerLayer:
     serializedVersion: 2
