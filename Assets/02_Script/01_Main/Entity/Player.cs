@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IDamage
     public static Player instance;
 
     #region 공격 관련 변수
+    [Header("공격 관련 변수")]
     [SerializeField] private Vector2 rangeSize;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Image atkGauge;
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour, IDamage
     }
     #endregion
     #region 이동 관련 변수
+    [Header("이동 관련 변수")]
     [SerializeField] private Image agiGauge;
     [SerializeField] private float agiMax;
     [SerializeField] private float agiDelayMax;
@@ -41,12 +43,16 @@ public class Player : MonoBehaviour, IDamage
     }
     #endregion
     #region 체력 관련 변수
+    [Header("체력 관련 변수")]
     [SerializeField] private Image hpGauge;
     [SerializeField] private float hpMax;
     private float hpCurrent;
     #endregion
     #region 스킬 관련 변수
+    [Header("스킬 관련 변수")]
     [SerializeField] private ObjectPooler skillPooler;
+    [SerializeField] private Image atkSkillGauge;
+    [SerializeField] private Image agiSkillGauge;
     [SerializeField] private float atkSkillMax;
     [SerializeField] private float atkSkillDelayMax;
     [SerializeField] private float agiSkillDelayMax;
@@ -65,7 +71,6 @@ public class Player : MonoBehaviour, IDamage
     public float ATKSkillDelay => atkSkillDelay;
     public float AGISkillDelay => agiSkillDelay;
     #endregion
-
 
     private void Awake()
     {
@@ -90,6 +95,7 @@ public class Player : MonoBehaviour, IDamage
         ATK();
         AGI();
         HP();
+        StatusGauge();
         StatusLimit();
 
         if (atkCurrent >= atkMax)
@@ -162,9 +168,6 @@ public class Player : MonoBehaviour, IDamage
 
     private void HP()
     {
-        atkGauge.fillAmount = atkCurrent / atkMax;
-        agiGauge.fillAmount = agiCurrent / agiMax;
-        hpGauge.fillAmount = hpCurrent / hpMax;
     }
 
     private void ATKSkill()
@@ -198,6 +201,15 @@ public class Player : MonoBehaviour, IDamage
 
             agiSkillDelay = agiSkillDelayMax;
         }
+    }
+
+    private void StatusGauge()
+    {
+        atkGauge.fillAmount = atkCurrent / atkMax;
+        agiGauge.fillAmount = agiCurrent / agiMax;
+        hpGauge.fillAmount = hpCurrent / hpMax;
+        atkSkillGauge.fillAmount = atkSkillCurrent / atkSkillMax;
+        agiSkillGauge.fillAmount = (3.0f - agiSkillDelayMax) / 2.5f;
     }
 
     private void StatusLimit()

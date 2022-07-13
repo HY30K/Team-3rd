@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamage
 {
     #region 공격 관련 변수
+    [Header("공격 관련 변수")]
     [SerializeField] private Vector2 attackRangeSize;
     [SerializeField] private Transform attackRangeTransform;
     [SerializeField] private float atkDelayMax;
@@ -12,17 +13,20 @@ public class Enemy : MonoBehaviour, IDamage
     private float atkDelay;
     #endregion
     #region 이동 관련 변수
+    [Header("이동 관련 변수")]
     [SerializeField] private Vector2 moveDirection;
     [SerializeField] private Transform detectRangeTransform;
     [SerializeField] private float detectRangeSize;
     private float agi;
     #endregion
     #region 체력 관련 변수
+    [Header("체력 관련 변수")]
     [SerializeField] private float hpMax;
     private ObjectPooler enemyPooler;
     private float hpCurrent;
     #endregion
     #region 플레이어 관련 변수
+    [Header("플레이어 관련 변수")]
     [SerializeField] private LayerMask playerLayer;
     private GameObject playerObject;
     private Player playerScript;

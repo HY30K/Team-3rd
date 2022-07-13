@@ -13,7 +13,7 @@ public class Fireball : MonoBehaviour
     {
         foreach (Collider2D enemy in Physics2D.OverlapCircleAll(hitPosition, hitSize, enemyLayer))
         {
-            enemy.GetComponent<Enemy>().OnDamage(player.ATKSkillCurrent);
+            enemy.GetComponent<Enemy>().OnDamage(5.0f + player.ATKSkillCurrent);
 
             player.ATKSkillCurrent += 2.0f;
         }
