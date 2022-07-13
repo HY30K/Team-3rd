@@ -4555,7 +4555,7 @@ MonoBehaviour:
   fadein: {fileID: 1394192595}
   option: {fileID: 1796460344}
   hideMap: {fileID: 1753662294}
-  sound: {fileID: 672931074}
+  sound: {fileID: 1796460344}
   inform: {fileID: 1137973139}
   key: {fileID: 672931074}
   gauge: {fileID: 1398329284}

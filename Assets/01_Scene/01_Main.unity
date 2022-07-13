@@ -3337,6 +3337,8 @@ MonoBehaviour:
   hpGauge: {fileID: 1894231953}
   hpMax: 10
   skillPooler: {fileID: 123521725}
+  atkSkillGauge: {fileID: 1098979632}
+  agiSkillGauge: {fileID: 27417766}
   atkSkillMax: 10
   atkSkillDelayMax: 5
   agiSkillDelayMax: 2
