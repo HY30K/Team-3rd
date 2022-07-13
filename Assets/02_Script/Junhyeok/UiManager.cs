@@ -12,6 +12,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image option = null;
     [SerializeField] Image hideMap = null;
     [SerializeField] Image sound = null;
+    [SerializeField] Image inform = null;
+    [SerializeField] Image Key = null;
+    [SerializeField] Image gauge = null;
     [SerializeField] new GameObject audio = null;
     AudioSource source;
     bool isOpen = false;
@@ -63,14 +66,7 @@ public class UIManager : MonoBehaviour
         //    Time.timeScale = 1;
         //}
     }
-    private void OnEnable()
-    {
-        /*option.rectTransform.localScale = new Vector3(0, 0, 0);
-        option.gameObject.SetActive(false);
-
-        fadeout.color = new Color(0, 0, 0);
-        fadeout.DOFade(0, 2f);*/
-    }
+    //______________________________________________________________________________________
     //씬 불러오기
     public void SceneLoader(string sceneName)
     {
@@ -88,6 +84,7 @@ public class UIManager : MonoBehaviour
         //Application.Quit();
         Debug.Log("Quit");
     }
+    //______________________________________________________________________________________
     //설정창 열기
     public void Option()
     {
@@ -98,6 +95,23 @@ public class UIManager : MonoBehaviour
         option.gameObject.transform.DOScale(1, 1).SetUpdate(true);
         isOpen = true;
     }
+    //설정창 닫기 
+    public void Close()
+    {
+        StartCoroutine(CloseWindow());
+        isOpen = false;
+    }
+    IEnumerator CloseWindow()
+    {
+        source.Play();
+
+        hideMap.gameObject.SetActive(false);
+
+        option.gameObject.transform.DOScale(0, 0.6f);
+        yield return new WaitForSeconds(0.4f);
+        option.gameObject.SetActive(false);
+    }
+    //______________________________________________________________________________________
     //사운드설정 열기
     public void Sound()
     {
@@ -124,20 +138,33 @@ public class UIManager : MonoBehaviour
         }
         isOther = false;
     }
-    //설정창 닫기 
-    public void Close()
+    //______________________________________________________________________________________
+    //정보 선택창 열기
+    public void Inform()
     {
-        StartCoroutine(CloseWindow());
+        source.Play();
+
+        hideMap.gameObject.SetActive(true);
+
+        inform.gameObject.SetActive(true);
+        option.gameObject.transform.DOScale(1, 1).SetUpdate(true);
+
+        isOther = true;
+    }
+    //정보 선택창 닫기
+    public void Close2()
+    {
+        StartCoroutine(CloseWindow2());
         isOpen = false;
     }
-    IEnumerator CloseWindow()
+    IEnumerator CloseWindow2()
     {
         source.Play();
 
         hideMap.gameObject.SetActive(false);
 
-        option.gameObject.transform.DOScale(0, 0.6f);
+        inform.gameObject.transform.DOScale(0, 0.6f);
         yield return new WaitForSeconds(0.4f);
-        option.gameObject.SetActive(false);
+        inform.gameObject.SetActive(false);
     }
 }
