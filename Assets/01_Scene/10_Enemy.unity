@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 553340460}
   - component: {fileID: 553340459}
   - component: {fileID: 553340464}
+  - component: {fileID: 553340465}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -376,9 +377,29 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   rangeTransform: {fileID: 1764308601}
-  rigidbody2D: {fileID: 553340459}
+  atkMax: 0
+  atkDelayMax: 0
+  agiMax: 0
+  agiDelayMax: 0
   hpGauge: {fileID: 851060069}
   hpMax: 10
+  skillPooler: {fileID: 0}
+  atkSkillDelayMax: 0
+  agiSkillDelayMax: 0
+--- !u!114 &553340465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553340457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384c2881fa284c64bac4b2962c0a8e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs: []
+  poolSize: 0
 --- !u!1 &851060067
 GameObject:
   m_ObjectHideFlags: 0

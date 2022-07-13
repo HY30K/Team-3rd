@@ -12,15 +12,21 @@ public class Player : MonoBehaviour, IDamage
     #region 공격 관련 변수
     [SerializeField] private Vector2 rangeSize;
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkMax;
     [SerializeField] private float atkDelayMax;
     private float atkCurrent;
     private float atkDelay;
 
-    public float ATKCurrent => atkCurrent;
+    public float ATKCurrent
+    {
+        get { return atkCurrent; }
+        set { atkCurrent = value; }
+    }
     #endregion
     #region 이동 관련 변수
+    [SerializeField] private Image agiGauge;
     [SerializeField] private float agiMax;
     [SerializeField] private float agiDelayMax;
     private Vector2 moveDirection;
@@ -28,7 +34,11 @@ public class Player : MonoBehaviour, IDamage
     private float agiDelay;
 
     public Vector2 MoveDirection => moveDirection;
-    public float AGICurrent => agiCurrent;
+    public float AGICurrent
+    {
+        get { return agiCurrent; }
+        set { agiCurrent = value; }
+    }
     #endregion
     #region 체력 관련 변수
     [SerializeField] private Image hpGauge;
@@ -37,13 +47,21 @@ public class Player : MonoBehaviour, IDamage
     #endregion
     #region 스킬 관련 변수
     [SerializeField] private ObjectPooler skillPooler;
+    [SerializeField] private float atkSkillMax;
     [SerializeField] private float atkSkillDelayMax;
     [SerializeField] private float agiSkillDelayMax;
+    private float atkSkillCurrent;
     private float atkSkillDelay;
     private float agiSkillDelay;
 
+    public float ATKSkillMax => atkSkillMax;
     public float ATKSkillDelayMax => atkSkillDelayMax;
     public float AGISkillDelayMax => agiSkillDelayMax;
+    public float ATKSkillCurrent
+    {
+        get { return atkSkillCurrent; }
+        set { atkSkillCurrent = value; }
+    }
     public float ATKSkillDelay => atkSkillDelay;
     public float AGISkillDelay => agiSkillDelay;
     #endregion
@@ -72,8 +90,17 @@ public class Player : MonoBehaviour, IDamage
         ATK();
         AGI();
         HP();
-        ATKSkill();
-        AGISkill();
+        StatusLimit();
+
+        if (atkCurrent >= atkMax)
+        {
+            ATKSkill();
+        }
+
+        if (agiCurrent >= agiMax)
+        {
+            AGISkill();
+        }
     }
 
     private void OnDrawGizmos()
@@ -98,8 +125,7 @@ public class Player : MonoBehaviour, IDamage
                 }
                 else
                 {
-                    atkCurrent = atkMax;
-                    //스킬 성장으로 전환
+                    atkSkillCurrent += 2.0f;
                 }
             }
 
@@ -127,8 +153,7 @@ public class Player : MonoBehaviour, IDamage
             }
             else
             {
-                agiCurrent = agiMax;
-                //스킬 성장으로 전환
+                agiSkillDelayMax -= 0.06f;
             }
 
             agiDelay = agiDelayMax;
@@ -137,6 +162,8 @@ public class Player : MonoBehaviour, IDamage
 
     private void HP()
     {
+        atkGauge.fillAmount = atkCurrent / atkMax;
+        agiGauge.fillAmount = agiCurrent / agiMax;
         hpGauge.fillAmount = hpCurrent / hpMax;
     }
 
@@ -173,9 +200,36 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
+    private void StatusLimit()
+    {
+        atkCurrent = Mathf.Clamp(atkCurrent, 0, atkMax);
+        agiCurrent = Mathf.Clamp(agiCurrent, 0, agiMax);
+        hpCurrent = Mathf.Clamp(hpCurrent, 0, hpMax);
+        atkSkillCurrent = Mathf.Clamp(atkSkillCurrent, 0, atkSkillMax);
+        agiSkillDelayMax = Mathf.Clamp(agiSkillDelayMax, 0.5f, 3.0f);
+    }
+
     public void OnDamage(float damage)
     {
         hpCurrent -= damage;
+
+        if (atkSkillCurrent > 0)
+        {
+            atkSkillCurrent -= 2.0f;
+        }
+        else
+        {
+            atkCurrent -= 0.2f;
+        }
+
+        if (agiSkillDelayMax < 3.0f)
+        {
+            agiSkillDelayMax += 0.06f;
+        }
+        else
+        {
+            agiCurrent -= 0.2f;
+        }
 
         if (hpCurrent <= 0.001f)
         {
