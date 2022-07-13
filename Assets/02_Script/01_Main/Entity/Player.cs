@@ -17,8 +17,9 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
     AudioSource punch;
-    AudioSource dash;
+    AudioSource hit;
     AudioSource skill;
+    AudioSource dash;
     private int atkLevel;
     public int ATKLevel
     {
@@ -76,6 +77,10 @@ public class Player : MonoBehaviour, IDamage
 
     private void Awake()
     {
+        punch = gameObject.GetComponent<AudioSource>();
+        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
+        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
+
         if (instance == null)
         {
             instance = this;
@@ -87,9 +92,6 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
-        punch = gameObject.GetComponent<AudioSource>();
-        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
-        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -105,7 +107,10 @@ public class Player : MonoBehaviour, IDamage
         {
             ATKSkill();
         }
+    }
 
+    private void FixedUpdate()
+    {
         if (agiLevel == 10)
         {
             AGISkill();
@@ -137,15 +142,15 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-
             punch.Play();
             atkDelay = atkDelayMax;
-
         }
     }
 
     private void AGI()
     {
+        agiSkillDelay -= Time.deltaTime;
+
         moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
@@ -189,26 +194,21 @@ public class Player : MonoBehaviour, IDamage
                 GameObject prefab = skillPooler.SpawnPrefab("Fireball");
                 prefab.transform.position = transform.position;
 
-                prefab.GetComponent<Rigidbody2D>().AddForce(new Vector2(moveDirection.x, moveDirection.y) * 20, ForceMode2D.Impulse);
-            }
+                prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
+                
+                skill.Play();
 
-            atkSkillDelay = atkSkillDelayMax;
-            skill.Play();
+                atkSkillDelay = atkSkillDelayMax;
+            }
         }
     }
 
     private void AGISkill()
     {
-        agiSkillDelay -= Time.deltaTime;
-
         if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-
-            //yield return new WaitForSeconds(0.1f);
-
             agiSkillDelay = agiSkillDelayMax;
-            //StartCoroutine("Dash");
             dash.Play();
         }
     }
@@ -264,15 +264,4 @@ public class Player : MonoBehaviour, IDamage
             SceneManager.LoadScene("03_GameOver");
         }
     }
-
-    /*private IEnumerator Dash()
-    {
-        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-        
-        yield return new WaitForSeconds(0.1f);
-
-        agiSkillDelay = agiSkillDelayMax;
-
-        StopCoroutine("Dash");
-    }*/
 }
