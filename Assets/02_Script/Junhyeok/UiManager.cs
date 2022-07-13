@@ -34,15 +34,15 @@ public class UIManager : MonoBehaviour
         {
             Close();
         }
-/*        if (isOther == true && Input.GetKeyDown(KeyCode.Escape))
-        {
-            isOpen = false;
-            Back();
-        }
-        if (isOther == true)
-        {
-            isOpen = false;
-        }*/
+        /*        if (isOther == true && Input.GetKeyDown(KeyCode.Escape))
+                {
+                    isOpen = false;
+                    Back();
+                }
+                if (isOther == true)
+                {
+                    isOpen = false;
+                }*/
 
 
         if (isOpen == true)
