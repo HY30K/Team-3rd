@@ -8,12 +8,6 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
-    public enum LayerName
-    {
-        IdleLayer = 0,
-        WalkLayer =1
-    }
-    [SerializeField] private Animator anim;
 
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
@@ -22,7 +16,10 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
-
+    AudioSource punch;
+    AudioSource hit;
+    AudioSource skill;
+    AudioSource dash;
     private int atkLevel;
     public int ATKLevel
     {
@@ -80,6 +77,10 @@ public class Player : MonoBehaviour, IDamage
 
     private void Awake()
     {
+        punch = gameObject.GetComponent<AudioSource>();
+        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
+        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
+
         if (instance == null)
         {
             instance = this;
@@ -91,7 +92,6 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
-        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -102,13 +102,15 @@ public class Player : MonoBehaviour, IDamage
         StatusGauge();
         StatusDelay();
         StatusLimit();
-        HandleLayer();
 
         if (atkLevel == 10)
         {
             ATKSkill();
         }
+    }
 
+    private void FixedUpdate()
+    {
         if (agiLevel == 10)
         {
             AGISkill();
@@ -140,13 +142,15 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-
-            //atkDelay = atkDelayMax;
+            punch.Play();
+            atkDelay = atkDelayMax;
         }
     }
 
     private void AGI()
     {
+        agiSkillDelay -= Time.deltaTime;
+
         moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
@@ -175,29 +179,6 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
-    public void HandleLayer()
-    {
-        if(moveDirection.x != 0 || moveDirection.y != 0)
-        {
-            ActivateLayer(LayerName.WalkLayer);
-            anim.SetFloat("x", moveDirection.x);
-            anim.SetFloat("y", moveDirection.y);
-        }
-        else
-        {
-            ActivateLayer(LayerName.IdleLayer);
-        }
-    }
-
-    public void ActivateLayer(LayerName layerName)
-    {
-        for(int i =0; i < anim.layerCount; i++)
-        {
-            anim.SetLayerWeight(1, 0);
-        }
-        anim.SetLayerWeight((int)layerName, 1);
-    }
-
     private void HP()
     {
     }
@@ -213,25 +194,22 @@ public class Player : MonoBehaviour, IDamage
                 GameObject prefab = skillPooler.SpawnPrefab("Fireball");
                 prefab.transform.position = transform.position;
 
-                prefab.GetComponent<Rigidbody2D>().AddForce(new Vector2(moveDirection.x, moveDirection.y) * 20, ForceMode2D.Impulse);
-            }
+                prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
+                
+                skill.Play();
 
-            atkSkillDelay = atkSkillDelayMax;
+                atkSkillDelay = atkSkillDelayMax;
+            }
         }
     }
 
     private void AGISkill()
     {
-        agiSkillDelay -= Time.deltaTime;
-
         if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-
-            //yield return new WaitForSeconds(0.1f);
-
             agiSkillDelay = agiSkillDelayMax;
-           // StartCoroutine("Dash");
+            dash.Play();
         }
     }
 
@@ -286,15 +264,4 @@ public class Player : MonoBehaviour, IDamage
             SceneManager.LoadScene("03_GameOver");
         }
     }
-
-    /*private IEnumerator Dash()
-    {
-        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-        
-        yield return new WaitForSeconds(0.1f);
-
-        agiSkillDelay = agiSkillDelayMax;
-
-        StopCoroutine("Dash");
-    }*/
 }
