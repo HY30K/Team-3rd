@@ -3304,6 +3304,7 @@ GameObject:
   - component: {fileID: 123521721}
   - component: {fileID: 123521720}
   - component: {fileID: 123521725}
+  - component: {fileID: 123521726}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -3374,7 +3375,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0.1}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -3425,7 +3426,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 1382465345, guid: 27e4bf0f597074346bf3dadd7a6076cf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3467,6 +3468,26 @@ MonoBehaviour:
   prefabs:
   - {fileID: 2641867185902978557, guid: 83f273b8523532d4b95ff91bbb6d8256, type: 3}
   poolSize: 10
+--- !u!95 &123521726
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123521719}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7dfe042a1163ee849bb526c0f9f261c3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &134200071
 GameObject:
   m_ObjectHideFlags: 0
@@ -4058,9 +4079,9 @@ MonoBehaviour:
   option: {fileID: 1805016117}
   hideMap: {fileID: 142581345}
   sound: {fileID: 2035788035}
-  inform: {fileID: 1894231953}
-  Key: {fileID: 1894231953}
-  gauge: {fileID: 1894231953}
+  inform: {fileID: 1588609638}
+  key: {fileID: 1588609638}
+  gauge: {fileID: 1588609638}
   audio: {fileID: 867928434}
 --- !u!1 &519420028
 GameObject:
@@ -4524,7 +4545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &863594803
 MonoBehaviour:
   m_ObjectHideFlags: 0
