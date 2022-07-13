@@ -13,7 +13,8 @@ public class Player : MonoBehaviour, IDamage
     {
         IdleLayer =0,
         WalkLayer =1,
-        AttackLayer=2
+        AttackLayer=2,
+        DashLayer=3
     }
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
@@ -188,17 +189,21 @@ public class Player : MonoBehaviour, IDamage
     }
     public void HandleLayers()
     {
-        if(moveDirection.x != 0 || moveDirection.y != 0)
+        if (moveDirection.x != 0 || moveDirection.y != 0)
         {
-            ActivateLayer(LayerName.WalkLayer);
-            anim.SetFloat("x",moveDirection.x);
-            anim.SetFloat("y",moveDirection.y);
+            if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && agiLevel == 10)
+            {
+                ActivateLayer(LayerName.DashLayer);
+                anim.SetFloat("x", moveDirection.x);
+            }
+            else
+            {
+                ActivateLayer(LayerName.WalkLayer);
+                anim.SetFloat("x", moveDirection.x);
+                anim.SetFloat("y", moveDirection.y);
+            }
         }
-        //else if(moveDirection.x <=0.1 || moveDirection.y <=0.1)
-        //{
-        //    ActivateLayer(LayerName.AttackLayer);
-        //}
-        else
+        else 
         {
             ActivateLayer(LayerName.IdleLayer);
         }
