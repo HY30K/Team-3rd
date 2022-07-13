@@ -132,7 +132,7 @@ public class Player : MonoBehaviour, IDamage
                 }
             }
 
-            //atkDelay = atkDelayMax;
+            atkDelay = atkDelayMax;
         }
     }
 
@@ -181,7 +181,7 @@ public class Player : MonoBehaviour, IDamage
                 GameObject prefab = skillPooler.SpawnPrefab("Fireball");
                 prefab.transform.position = transform.position;
 
-                prefab.GetComponent<Rigidbody2D>().AddForce(new Vector2(moveDirection.x, moveDirection.y) * 20, ForceMode2D.Impulse);
+                prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
             }
 
             atkSkillDelay = atkSkillDelayMax;
@@ -192,14 +192,10 @@ public class Player : MonoBehaviour, IDamage
     {
         agiSkillDelay -= Time.deltaTime;
 
-        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
+        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift))
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-
-            //yield return new WaitForSeconds(0.1f);
-
             agiSkillDelay = agiSkillDelayMax;
-           // StartCoroutine("Dash");
         }
     }
 
@@ -254,15 +250,4 @@ public class Player : MonoBehaviour, IDamage
             SceneManager.LoadScene("03_GameOver");
         }
     }
-
-    /*private IEnumerator Dash()
-    {
-        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-        
-        yield return new WaitForSeconds(0.1f);
-
-        agiSkillDelay = agiSkillDelayMax;
-
-        StopCoroutine("Dash");
-    }*/
 }

@@ -4227,7 +4227,7 @@ MonoBehaviour:
   hideMap: {fileID: 142581345}
   sound: {fileID: 2035788035}
   inform: {fileID: 1894231953}
-  key: {fileID: 0}
+  key: {fileID: 1894231953}
   gauge: {fileID: 1894231953}
   audio: {fileID: 867928434}
 --- !u!1 &519420028
