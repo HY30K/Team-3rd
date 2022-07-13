@@ -376,14 +376,17 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
+  atkGauge: {fileID: 0}
   rangeTransform: {fileID: 1764308601}
   atkMax: 0
   atkDelayMax: 0
+  agiGauge: {fileID: 0}
   agiMax: 0
   agiDelayMax: 0
   hpGauge: {fileID: 851060069}
   hpMax: 10
   skillPooler: {fileID: 0}
+  atkSkillMax: 0
   atkSkillDelayMax: 0
   agiSkillDelayMax: 0
 --- !u!114 &553340465
