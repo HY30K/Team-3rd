@@ -8,6 +8,12 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
+    public enum LayerName
+    {
+        IdleLayer = 0,
+        WalkLayer =1
+    }
+    [SerializeField] private Animator anim;
 
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
@@ -16,9 +22,7 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
-    AudioSource punch;
-    AudioSource dash;
-    AudioSource skill;
+
     private int atkLevel;
     public int ATKLevel
     {
@@ -87,9 +91,7 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
-        punch = gameObject.GetComponent<AudioSource>();
-        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
-        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -100,6 +102,7 @@ public class Player : MonoBehaviour, IDamage
         StatusGauge();
         StatusDelay();
         StatusLimit();
+        HandleLayer();
 
         if (atkLevel == 10)
         {
@@ -138,9 +141,7 @@ public class Player : MonoBehaviour, IDamage
                 }
             }
 
-            punch.Play();
-            atkDelay = atkDelayMax;
-
+            //atkDelay = atkDelayMax;
         }
     }
 
@@ -174,6 +175,29 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
+    public void HandleLayer()
+    {
+        if(moveDirection.x != 0 || moveDirection.y != 0)
+        {
+            ActivateLayer(LayerName.WalkLayer);
+            anim.SetFloat("x", moveDirection.x);
+            anim.SetFloat("y", moveDirection.y);
+        }
+        else
+        {
+            ActivateLayer(LayerName.IdleLayer);
+        }
+    }
+
+    public void ActivateLayer(LayerName layerName)
+    {
+        for(int i =0; i < anim.layerCount; i++)
+        {
+            anim.SetLayerWeight(1, 0);
+        }
+        anim.SetLayerWeight((int)layerName, 1);
+    }
+
     private void HP()
     {
     }
@@ -193,7 +217,6 @@ public class Player : MonoBehaviour, IDamage
             }
 
             atkSkillDelay = atkSkillDelayMax;
-            skill.Play();
         }
     }
 
@@ -208,8 +231,7 @@ public class Player : MonoBehaviour, IDamage
             //yield return new WaitForSeconds(0.1f);
 
             agiSkillDelay = agiSkillDelayMax;
-            //StartCoroutine("Dash");
-            dash.Play();
+           // StartCoroutine("Dash");
         }
     }
 
