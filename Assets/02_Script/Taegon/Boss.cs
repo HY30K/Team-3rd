@@ -2,27 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamage
+public class Boss : MonoBehaviour, IDamage
 {
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 attackRangeSize;
     [SerializeField] private Transform attackRangeTransform;
-    [SerializeField] private float atk;
     [SerializeField] private float atkDelayMax;
+    private float atk;
     private float atkDelay;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
     [SerializeField] private Vector2 moveDirection;
-    [SerializeField] private Transform detectRangeTransform;
-    [SerializeField] private float detectRangeSize;
-    [SerializeField] private float agi;
+    private float agi;
     #endregion
     #region 체력 관련 변수
     [Header("체력 관련 변수")]
     [SerializeField] private float hpMax;
-    private ObjectPooler enemyPooler;
+    private ObjectPooler bossPooler;
     private float hpCurrent;
     #endregion
     #region 플레이어 관련 변수
@@ -34,7 +32,7 @@ public class Enemy : MonoBehaviour, IDamage
     private void Awake()
     {
         playerObject = GameObject.Find("Player");
-        enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        bossPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
     }
 
     private void OnEnable()
@@ -53,8 +51,6 @@ public class Enemy : MonoBehaviour, IDamage
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(attackRangeTransform.position, attackRangeSize);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize);
     }
 
     private void ATK()
@@ -73,19 +69,9 @@ public class Enemy : MonoBehaviour, IDamage
 
     private void AGI()
     {
-        if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
-        {
-            moveDirection = playerObject.transform.position - transform.position;
-
-            moveDirection.Normalize();
-        }
-        else
-        {
-            moveDirection = Vector2.zero;
-        }
-
+        moveDirection = playerObject.transform.position - transform.position;
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
-        attackRangeTransform.localPosition = moveDirection;
+        attackRangeTransform.localPosition = moveDirection.normalized;
     }
 
     public void OnDamage(float damage)
@@ -94,7 +80,7 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (hpCurrent <= 0.001f)
         {
-            enemyPooler.DespawnPrefab(gameObject);
+            bossPooler.DespawnPrefab(gameObject);
         }
     }
 }
