@@ -132,7 +132,7 @@ public class Player : MonoBehaviour, IDamage
                 }
             }
 
-            atkDelay = atkDelayMax;
+            //atkDelay = atkDelayMax;
         }
     }
 
@@ -192,9 +192,14 @@ public class Player : MonoBehaviour, IDamage
     {
         agiSkillDelay -= Time.deltaTime;
 
-        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift))
+        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
         {
-            StartCoroutine("Dash");
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
+
+            //yield return new WaitForSeconds(0.1f);
+
+            agiSkillDelay = agiSkillDelayMax;
+           // StartCoroutine("Dash");
         }
     }
 
@@ -250,14 +255,14 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
-    private IEnumerator Dash()
+    /*private IEnumerator Dash()
     {
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-
+        
         yield return new WaitForSeconds(0.1f);
 
         agiSkillDelay = agiSkillDelayMax;
 
         StopCoroutine("Dash");
-    }
+    }*/
 }
