@@ -5,13 +5,18 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private Vector2 hitPosition;
-    [SerializeField] private Player player;
+    [SerializeField] private Transform hitPosition;
     [SerializeField] private float hitSize;
+    private Player player;
+
+    private void Awake()
+    {
+        player = GameObject.Find("Player").GetComponent<Player>();
+    }
 
     private void Update()
     {
-        foreach (Collider2D enemy in Physics2D.OverlapCircleAll(hitPosition, hitSize, enemyLayer))
+        foreach (Collider2D enemy in Physics2D.OverlapCircleAll(hitPosition.position, hitSize, enemyLayer))
         {
             enemy.GetComponent<Enemy>().OnDamage(player.ATKLevel + player.ATKSkillLevel);
 
