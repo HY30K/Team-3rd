@@ -8,6 +8,12 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
+    public enum LayerName
+    {
+        IdleLayer = 0,
+        WalkLayer =1
+    }
+    [SerializeField] private Animator anim;
 
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
@@ -16,6 +22,7 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
+
     private int atkLevel;
     public int ATKLevel
     {
@@ -84,6 +91,7 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -94,6 +102,7 @@ public class Player : MonoBehaviour, IDamage
         StatusGauge();
         StatusDelay();
         StatusLimit();
+        HandleLayer();
 
         if (atkLevel == 10)
         {
@@ -164,6 +173,29 @@ public class Player : MonoBehaviour, IDamage
 
             agiDelay = agiDelayMax;
         }
+    }
+
+    public void HandleLayer()
+    {
+        if(moveDirection.x != 0 || moveDirection.y != 0)
+        {
+            ActivateLayer(LayerName.WalkLayer);
+            anim.SetFloat("x", moveDirection.x);
+            anim.SetFloat("y", moveDirection.y);
+        }
+        else
+        {
+            ActivateLayer(LayerName.IdleLayer);
+        }
+    }
+
+    public void ActivateLayer(LayerName layerName)
+    {
+        for(int i =0; i < anim.layerCount; i++)
+        {
+            anim.SetLayerWeight(1, 0);
+        }
+        anim.SetLayerWeight((int)layerName, 1);
     }
 
     private void HP()
