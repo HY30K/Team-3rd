@@ -29,15 +29,12 @@ public class Enemy : MonoBehaviour, IDamage
     [Header("플레이어 관련 변수")]
     [SerializeField] private LayerMask playerLayer;
     private GameObject playerObject;
-    private Player playerScript;
     #endregion
 
     private void Awake()
     {
         playerObject = GameObject.Find("Player");
-        playerScript = playerObject.GetComponent<Player>();
         enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
-        atkDelay = atkDelayMax - atk / 2.0f;
     }
 
     private void OnEnable()
@@ -50,9 +47,6 @@ public class Enemy : MonoBehaviour, IDamage
     {
         ATK();
         AGI();
-
-        atk = playerScript.ATKCurrent;
-        agi = playerScript.AGICurrent;
     }
 
     private void OnDrawGizmos()
@@ -73,7 +67,7 @@ public class Enemy : MonoBehaviour, IDamage
 
             player.GetComponent<Player>().OnDamage(0.5f + atk);
 
-            atkDelay = atkDelayMax - atk / 2.0f;
+            atkDelay = atkDelayMax;
         }
     }
 
@@ -90,9 +84,8 @@ public class Enemy : MonoBehaviour, IDamage
             moveDirection = Vector2.zero;
         }
 
+        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
         attackRangeTransform.localPosition = moveDirection;
-
-        transform.Translate(moveDirection * (0.5f + agi) * Time.deltaTime);
     }
 
     public void OnDamage(float damage)

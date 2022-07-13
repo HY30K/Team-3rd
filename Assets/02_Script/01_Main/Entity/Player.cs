@@ -15,37 +15,33 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
-    [SerializeField] private float atkMax;
     [SerializeField] private float atkDelayMax;
-    private float atkCurrent;
-    private float atkDelay;
-
-    public float ATKCurrent
+    private int atkLevel;
+    public int ATKLevel
     {
-        get { return atkCurrent; }
-        set { atkCurrent = value; }
+        get { return atkLevel; }
+        set { atkLevel = value; }
     }
+    private float atkDelay;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
     [SerializeField] private Image agiGauge;
-    [SerializeField] private float agiMax;
     [SerializeField] private float agiDelayMax;
     private Vector2 moveDirection;
-    private float agiCurrent;
-    private float agiDelay;
-
     public Vector2 MoveDirection => moveDirection;
-    public float AGICurrent
+    private int agiLevel;
+    public int AGILevel
     {
-        get { return agiCurrent; }
-        set { agiCurrent = value; }
+        get { return agiLevel; }
+        set { agiLevel = value; }
     }
+    private float agiDelay;
     #endregion
     #region 체력 관련 변수
     [Header("체력 관련 변수")]
     [SerializeField] private Image hpGauge;
-    [SerializeField] private float hpMax;
+    private int hpLevel = 1;
     private float hpCurrent;
     #endregion
     #region 스킬 관련 변수
@@ -53,22 +49,25 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private ObjectPooler skillPooler;
     [SerializeField] private Image atkSkillGauge;
     [SerializeField] private Image agiSkillGauge;
-    [SerializeField] private float atkSkillMax;
     [SerializeField] private float atkSkillDelayMax;
-    [SerializeField] private float agiSkillDelayMax;
-    private float atkSkillCurrent;
-    private float atkSkillDelay;
-    private float agiSkillDelay;
-
-    public float ATKSkillMax => atkSkillMax;
     public float ATKSkillDelayMax => atkSkillDelayMax;
+    private float agiSkillDelayMax;
     public float AGISkillDelayMax => agiSkillDelayMax;
-    public float ATKSkillCurrent
+    private int atkSkillLevel;
+    public int ATKSkillLevel
     {
-        get { return atkSkillCurrent; }
-        set { atkSkillCurrent = value; }
+        get { return atkSkillLevel; }
+        set { atkSkillLevel = value; }
     }
+    private int agiSkillLevel;
+    public int AGISkillLevel
+    {
+        get { return agiSkillLevel; }
+        set { agiSkillLevel = value; }
+    }
+    private float atkSkillDelay;
     public float ATKSkillDelay => atkSkillDelay;
+    private float agiSkillDelay;
     public float AGISkillDelay => agiSkillDelay;
     #endregion
 
@@ -83,11 +82,8 @@ public class Player : MonoBehaviour, IDamage
             Destroy(gameObject);
         }
 
-        atkDelay = atkDelayMax - atkCurrent / 4.0f;
         agiDelay = agiDelayMax;
-        hpCurrent = hpMax;
-        atkSkillDelay = atkSkillDelayMax;
-        agiSkillDelay = agiSkillDelayMax;
+        hpCurrent = hpLevel * 10;
     }
 
     private void Update()
@@ -96,14 +92,15 @@ public class Player : MonoBehaviour, IDamage
         AGI();
         HP();
         StatusGauge();
+        StatusDelay();
         StatusLimit();
 
-        if (atkCurrent >= atkMax)
+        if (atkLevel == 10)
         {
             ATKSkill();
         }
 
-        if (agiCurrent >= agiMax)
+        if (agiLevel == 10)
         {
             AGISkill();
         }
@@ -123,43 +120,46 @@ public class Player : MonoBehaviour, IDamage
         {
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
-                enemy.GetComponent<Enemy>().OnDamage(1.0f + atkCurrent);
+                enemy.GetComponent<Enemy>().OnDamage(atkLevel);
 
-                if (atkCurrent < atkMax)
+                if (atkLevel < 10)
                 {
-                    atkCurrent += 0.2f;
+                    atkLevel++;
                 }
                 else
                 {
-                    atkSkillCurrent += 2.0f;
+                    atkSkillLevel++;
                 }
             }
 
-            atkDelay = atkDelayMax - atkCurrent / 4.0f; ;
+            atkDelay = atkDelayMax;
         }
     }
 
     private void AGI()
     {
-        moveDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        rangeTransform.localPosition = moveDirection;
+        moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        transform.Translate(moveDirection * (1.0f + agiCurrent) * Time.deltaTime);
+        if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
+        {
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agiLevel;
+        }
 
         if (moveDirection.x != 0 || moveDirection.y != 0)
         {
             agiDelay -= Time.deltaTime;
+            rangeTransform.localPosition = moveDirection;
         }
 
         if (agiDelay <= 0.001f)
         {
-            if (agiCurrent < agiMax)
+            if (agiLevel < 10)
             {
-                agiCurrent += 0.2f;
+                agiLevel++;
             }
             else
             {
-                agiSkillDelayMax -= 0.06f;
+                agiSkillLevel++;
             }
 
             agiDelay = agiDelayMax;
@@ -194,58 +194,70 @@ public class Player : MonoBehaviour, IDamage
 
         if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if (moveDirection.x != 0 || moveDirection.y != 0)
-            {
-                transform.DOLocalMove(new Vector3(moveDirection.x * 2, moveDirection.y * 2), 0.3f).SetRelative();
-            }
-
-            agiSkillDelay = agiSkillDelayMax;
+            StartCoroutine("Dash");
         }
     }
 
     private void StatusGauge()
     {
-        atkGauge.fillAmount = atkCurrent / atkMax;
-        agiGauge.fillAmount = agiCurrent / agiMax;
-        hpGauge.fillAmount = hpCurrent / hpMax;
-        atkSkillGauge.fillAmount = atkSkillCurrent / atkSkillMax;
-        agiSkillGauge.fillAmount = (3.0f - agiSkillDelayMax) / 2.5f;
+        atkGauge.fillAmount = (float)atkLevel / 10;
+        agiGauge.fillAmount = (float)agiLevel / 10;
+        hpGauge.fillAmount = hpCurrent / (hpLevel * 10);
+        atkSkillGauge.fillAmount = (float)atkSkillLevel / 10;
+        agiSkillGauge.fillAmount = (float)agiSkillLevel / 10;
+    }
+
+    private void StatusDelay()
+    {
+        atkDelayMax = 3.0f - atkLevel * 0.25f;
+        agiSkillDelayMax = 4.0f - agiSkillLevel * 0.25f; 
     }
 
     private void StatusLimit()
     {
-        atkCurrent = Mathf.Clamp(atkCurrent, 0, atkMax);
-        agiCurrent = Mathf.Clamp(agiCurrent, 0, agiMax);
-        hpCurrent = Mathf.Clamp(hpCurrent, 0, hpMax);
-        atkSkillCurrent = Mathf.Clamp(atkSkillCurrent, 0, atkSkillMax);
-        agiSkillDelayMax = Mathf.Clamp(agiSkillDelayMax, 0.5f, 3.0f);
+        atkLevel = Mathf.Clamp(atkLevel, 1, 10);
+        agiLevel = Mathf.Clamp(agiLevel, 1, 10);
+        hpCurrent = Mathf.Clamp(hpCurrent, 0, hpLevel * 10);
+        atkSkillLevel = Mathf.Clamp(atkSkillLevel, 0, 10);
+        agiSkillLevel = Mathf.Clamp(agiSkillLevel, 0, 10);
     }
 
     public void OnDamage(float damage)
     {
         hpCurrent -= damage;
 
-        if (atkSkillCurrent > 0)
+        if (atkSkillLevel > 0)
         {
-            atkSkillCurrent -= 2.0f;
+            atkSkillLevel--;
         }
         else
         {
-            atkCurrent -= 0.2f;
+            atkLevel--;
         }
 
-        if (agiSkillDelayMax < 3.0f)
+        if (agiSkillLevel > 0)
         {
-            agiSkillDelayMax += 0.06f;
+            agiSkillLevel--;
         }
         else
         {
-            agiCurrent -= 0.2f;
+            agiLevel--;
         }
 
         if (hpCurrent <= 0.001f)
         {
             SceneManager.LoadScene("03_GameOver");
         }
+    }
+
+    private IEnumerator Dash()
+    {
+        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
+
+        yield return new WaitForSeconds(0.1f);
+
+        agiSkillDelay = agiSkillDelayMax;
+
+        StopCoroutine("Dash");
     }
 }
