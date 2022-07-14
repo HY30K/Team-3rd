@@ -8,14 +8,17 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
-    [SerializeField] Animator anim;
+
+    private Animator anim;
     public enum LayerName
     {
-        IdleLayer =0,
-        WalkLayer =1,
-        AttackLayer=2,
-        DashLayer=3
+        IdleLayer = 0,
+        WalkLayer = 1,
+        AttackLayer = 2,
+        DashLayer = 3
     }
+    
+
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 rangeSize;
@@ -23,10 +26,6 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
-    AudioSource punch;
-    AudioSource hit;
-    AudioSource skill;
-    AudioSource dash;
     private int atkLevel;
     public int ATKLevel
     {
@@ -53,7 +52,17 @@ public class Player : MonoBehaviour, IDamage
     [Header("체력 관련 변수")]
     [SerializeField] private Image hpGauge;
     private int hpLevel = 1;
+    public int HPLevel
+    {
+        get { return hpLevel; }
+        set { hpLevel = value; }
+    }
     private float hpCurrent;
+    public float HPCurrent
+    {
+        get { return hpCurrent; }
+        set { hpCurrent = value; }
+    }
     #endregion
     #region 스킬 관련 변수
     [Header("스킬 관련 변수")]
@@ -62,7 +71,7 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image agiSkillGauge;
     [SerializeField] private float atkSkillDelayMax;
     public float ATKSkillDelayMax => atkSkillDelayMax;
-    private float agiSkillDelayMax;
+    [SerializeField] private float agiSkillDelayMax;
     public float AGISkillDelayMax => agiSkillDelayMax;
     private int atkSkillLevel;
     public int ATKSkillLevel
@@ -82,13 +91,16 @@ public class Player : MonoBehaviour, IDamage
     public float AGISkillDelay => agiSkillDelay;
     #endregion
 
+    private bool isMove;
+    private bool isAttack;
+    private bool isDash;
+    private bool isIdle;
+
+    float animDelay;
+
     private void Awake()
     {
-        punch = gameObject.GetComponent<AudioSource>();
-        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
-        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
-        anim = GetComponent<Animator>();
-
+        
         if (instance == null)
         {
             instance = this;
@@ -100,6 +112,10 @@ public class Player : MonoBehaviour, IDamage
 
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
+    }
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -135,12 +151,13 @@ public class Player : MonoBehaviour, IDamage
     private void ATK()
     {
         atkDelay -= Time.deltaTime;
-
-        if (atkDelay <= 0.001f && Input.GetKeyDown(KeyCode.K))
+        if (atkDelay <= 0.001f && Input.GetKeyDown(KeyCode.K) && !isDash)
         {
+            isAttack = true;
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
                 enemy.GetComponent<Enemy>().OnDamage(atkLevel);
+                AudioManager.instance.SFXS[2].Play();
 
                 if (atkLevel < 10)
                 {
@@ -151,18 +168,31 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-            punch.Play();
+            AudioManager.instance.SFXS[1].Play();
+        }
+
+        if (isAttack)
+        {
+            animDelay -= Time.deltaTime;
+        }
+
+        if (animDelay <= 0.001f)
+        {
+            isAttack = false;
+            animDelay = 0.4f;
             atkDelay = atkDelayMax;
         }
     }
 
+    float dirDelay;
+
     private void AGI()
     {
-        agiSkillDelay -= Time.deltaTime;
+        dirDelay -= Time.deltaTime;
 
         moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
+        if (!isDash)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agiLevel;
         }
@@ -170,7 +200,20 @@ public class Player : MonoBehaviour, IDamage
         if (moveDirection.x != 0 || moveDirection.y != 0)
         {
             agiDelay -= Time.deltaTime;
-            rangeTransform.localPosition = moveDirection;
+
+            if (dirDelay <= 0)
+            {
+                rangeTransform.localPosition = moveDirection;
+                dirDelay = 0.1f;
+            }
+
+            isIdle = false;
+            isMove = true;
+        }
+        else
+        {
+            isMove = false;
+            isIdle = true;
         }
 
         if (agiDelay <= 0.001f)
@@ -189,38 +232,49 @@ public class Player : MonoBehaviour, IDamage
     }
     public void HandleLayers()
     {
-        if (moveDirection.x != 0 || moveDirection.y != 0)
+        anim.SetFloat("atkX", rangeTransform.localPosition.x);
+        anim.SetFloat("atkY", rangeTransform.localPosition.y);
+        if (isAttack)
         {
-            if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && agiLevel == 10)
-            {
-                ActivateLayer(LayerName.DashLayer);
-                anim.SetFloat("x", moveDirection.x);
-            }
-            else
-            {
-                ActivateLayer(LayerName.WalkLayer);
-                anim.SetFloat("x", moveDirection.x);
-                anim.SetFloat("y", moveDirection.y);
-            }
+            ActivateLayer(LayerName.AttackLayer);
         }
-        else 
+        else
         {
-            ActivateLayer(LayerName.IdleLayer);
+            if (isMove)
+            {
+                if (!isDash)
+                {
+                    ActivateLayer(LayerName.WalkLayer);
+                    anim.SetFloat("x", moveDirection.x);
+                    anim.SetFloat("y", moveDirection.y);
+                }
+                else
+                {
+                    ActivateLayer(LayerName.DashLayer);
+                    anim.SetFloat("x", moveDirection.x);
+                    anim.SetFloat("y", moveDirection.y);
+                }
+            }
+            else if (isIdle)
+            {
+                ActivateLayer(LayerName.IdleLayer);
+            }
         }
     }
     public void ActivateLayer(LayerName layerName)
     {
-        for(int i =0; i < anim.layerCount; i++)
+        for(int i =0; i< anim.layerCount; i++)
         {
-            anim.SetLayerWeight(1, 0);
+            anim.SetLayerWeight(i, 0);
         }
         anim.SetLayerWeight((int)layerName, 1);
     }
 
+    Coroutine skillCoroutine;
+
     private void HP()
     {
     }
-
     private void ATKSkill()
     {
         atkSkillDelay -= Time.deltaTime;
@@ -230,24 +284,48 @@ public class Player : MonoBehaviour, IDamage
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
                 GameObject prefab = skillPooler.SpawnPrefab("Fireball");
+                skillCoroutine = StartCoroutine(AutoPush(prefab));
                 prefab.transform.position = transform.position;
 
                 prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
-                
-                skill.Play();
+
+                AudioManager.instance.SFXS[3].Play();
 
                 atkSkillDelay = atkSkillDelayMax;
             }
         }
     }
 
+    private IEnumerator AutoPush(GameObject prefab)
+    {
+        yield return new WaitForSeconds(0.8f);
+
+        skillPooler.DespawnPrefab(prefab);
+
+        StopCoroutine(skillCoroutine);
+    }
+
+    float dashCool;
     private void AGISkill()
     {
-        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
+        agiSkillDelay -= Time.deltaTime;
+        if (agiSkillDelay <= 0.001f && Input.GetKey(KeyCode.LeftShift) && isMove)
         {
-            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
+            isDash = true;
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 2);
+            AudioManager.instance.SFXS[4].Play();
+        }
+
+        if (isDash)
+        {
+            dashCool -= Time.deltaTime;
+        }
+
+        if (dashCool <= 0.001f)
+        {
+            isDash = false;
+            dashCool = 0.1f;
             agiSkillDelay = agiSkillDelayMax;
-            dash.Play();
         }
     }
 
@@ -270,6 +348,7 @@ public class Player : MonoBehaviour, IDamage
     {
         atkLevel = Mathf.Clamp(atkLevel, 1, 10);
         agiLevel = Mathf.Clamp(agiLevel, 1, 10);
+        hpLevel = Mathf.Clamp(hpLevel, 1, 10);
         hpCurrent = Mathf.Clamp(hpCurrent, 0, hpLevel * 10);
         atkSkillLevel = Mathf.Clamp(atkSkillLevel, 0, 10);
         agiSkillLevel = Mathf.Clamp(agiSkillLevel, 0, 10);

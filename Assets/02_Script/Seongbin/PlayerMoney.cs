@@ -14,7 +14,7 @@ public class PlayerMoney : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            money++;
+            money+= 100;
         }
     }
 }

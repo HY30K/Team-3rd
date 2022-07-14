@@ -17,11 +17,6 @@ public class StageChange : MonoBehaviour
         stage3,
         shop,
     }
-    // Start is called before the first frame update
-    public void Awake()
-    {
-
-    }
 
     // 박스 콜라이더에 닿는 순간 이벤트 발생
     private void OnTriggerEnter2D(Collider2D collision)

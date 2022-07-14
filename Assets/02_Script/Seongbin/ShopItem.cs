@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ShopItem : InteractObj
+public class ShopItem : MonoBehaviour
 {
+    public bool interacted;
+
     [SerializeField] private TextMeshPro itemText;
     [SerializeField] private GameObject itemBG;
     [SerializeField] private GameObject item;
     public string itemName;
 
-    [SerializeField] private int itemPrice = 0;
-    [SerializeField] private ItemType itemType;
-
-    public GameObject Image;
-    public GameObject itemPrefab;
-
+    [SerializeField] private int itemPrice = 100;
     private enum ItemType
     {
         Protein,
@@ -23,28 +20,22 @@ public class ShopItem : InteractObj
         Energybar,
         Water
     }
+    [SerializeField] private ItemType itemType;
+
+    public GameObject Image;
+    public GameObject itemPrefab;
+
     void Start()
     {
         ItemName();
     }
-    private void ItemName()
+    private void Interact()
     {
-        itemText.text = itemName + "\n" + itemPrice + "G";
-        /*float x = itemText.preferredWidth;
-        float y = itemText.preferredHeight / 0.5f;
-        x = (x > 2.5f) ? 2.5f : x + 0.5f;
-        Debug.Log(itemText.preferredHeight + "\n" + y);
-        itemBG.transform.localScale = new Vector3(x, itemText.preferredHeight + y * 0.5f);
-        item.transform.position += new Vector3(0, y * 0.5f);*/
-    }
-    protected override void Interact()
-    {
-        base.Interact();
         Debug.Log(gameObject.name);
         if (BuyItem(itemPrice))
         {
-            Image.SetActive(false);
-            this.enabled = false;
+/*            Image.SetActive(false);
+            this.enabled = false;*/
         }
     }
     public bool BuyItem(int price)
@@ -52,7 +43,6 @@ public class ShopItem : InteractObj
         if (PlayerMoney.money >= price)
         {
             PlayerMoney.money -= price;
-            //UIManager.instance.coinUi();
             Debug.Log("아이템 구입");
             GameObject item = Instantiate(itemPrefab, gameObject.transform.position, Quaternion.identity);
             Item itemScript = item.GetComponent<Item>();
@@ -80,8 +70,17 @@ public class ShopItem : InteractObj
         }
         return false;
     }
+    private void ItemName()
+    {
+        itemText.text = itemName + "\n" + itemPrice + "G";
+    }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K) && interacted)
+        {
+            Interact();
+        }
+
         ItemViewer itemScript = Image.GetComponent<ItemViewer>();
 
         switch (itemType)
@@ -102,5 +101,19 @@ public class ShopItem : InteractObj
                 break;
         }
         itemScript.ItemViewers();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            interacted = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            interacted = false;
+        }
     }
 }

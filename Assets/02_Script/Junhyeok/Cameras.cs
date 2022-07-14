@@ -13,6 +13,10 @@ public class Cameras : MonoBehaviour
 
     void Update()
     {
+        CameraMove();
+    }
+    void CameraMove()
+    {
         if (target.gameObject != null)
         {
             // this는 카메라를 의미 (z값은 카메라값을 그대로 유지)
