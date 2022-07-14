@@ -24,6 +24,7 @@ public class Item : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Destroy(gameObject, 2.25f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -31,7 +32,7 @@ public class Item : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             GetItem();
-            Destroy(gameObject, 0.75f);
+            Destroy(gameObject);
         }
     }
     private void GetItem()//statup
@@ -75,6 +76,5 @@ public class Item : MonoBehaviour
     {
         gameObject.SetActive(true);
         rig.AddForce(new Vector2(0, 10) * power);
-        Invoke("canGetItem", 1f);
     }
 }
