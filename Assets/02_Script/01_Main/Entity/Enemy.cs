@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] private float atk;
     [SerializeField] private float atkDelayMax;
     private float atkDelay;
+    private SpriteRenderer spriteRenderer;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
@@ -37,12 +38,14 @@ public class Enemy : MonoBehaviour, IDamage
         playerObject = GameObject.Find("Player");
         enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
     {
         moveDirection = Vector2.zero;
         hpCurrent = hpMax;
+        atkDelay = atkDelayMax;
     }
 
     private void Update()
@@ -65,7 +68,7 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (atkDelay <= 0.001f && Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
         {
-            anim.SetTrigger("lsAttack");
+            anim.SetTrigger("isAttack");
 
             Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
 
@@ -77,19 +80,36 @@ public class Enemy : MonoBehaviour, IDamage
 
     private void AGI()
     {
-        if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
+        if (hpCurrent > 0.001f)
         {
-            anim.SetBool("lsWark", true);
+            if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
+            {
+                anim.SetBool("isStop", false);
+                anim.SetBool("isWalk", true);
 
-            moveDirection = playerObject.transform.position - transform.position;
+                moveDirection = playerObject.transform.position - transform.position;
+                if (transform.position.x > playerObject.transform.position.x)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else if (transform.position.x < playerObject.transform.position.x)
+                {
+                    spriteRenderer.flipX = false;
+                }
+                else
+                {
+                    anim.SetBool("isStop", true);
+                }
 
-            moveDirection.Normalize();
-        }
-        else
-        {
-            anim.SetBool("lsIdle", true);
-            moveDirection = Vector2.zero;
-        }
+                moveDirection.Normalize();
+            }
+            else
+            {
+                anim.SetBool("isWalk", false);
+                anim.SetBool("isStop", true);
+                moveDirection = Vector2.zero;
+            }
+        }    
 
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
         attackRangeTransform.localPosition = moveDirection;
@@ -101,8 +121,14 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (hpCurrent <= 0.001f)
         {
-            anim.SetTrigger("lsDeath");
-            enemyPooler.DespawnPrefab(gameObject);
+            moveDirection = Vector2.zero;
+            anim.SetTrigger("isDead");
+            Invoke("isDead", 1);
         }
+    }
+
+    public void isDead()
+    {
+        enemyPooler.DespawnPrefab(gameObject);
     }
 }
