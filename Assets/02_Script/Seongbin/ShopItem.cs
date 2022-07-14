@@ -34,8 +34,8 @@ public class ShopItem : MonoBehaviour
         Debug.Log(gameObject.name);
         if (BuyItem(itemPrice))
         {
-            Image.SetActive(false);
-            this.enabled = false;
+/*            Image.SetActive(false);
+            this.enabled = false;*/
         }
     }
     public bool BuyItem(int price)
