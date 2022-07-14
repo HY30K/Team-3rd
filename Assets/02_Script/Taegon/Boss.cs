@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : MonoBehaviour, IDamage
@@ -11,9 +9,10 @@ public class Boss : MonoBehaviour, IDamage
     [SerializeField] private Transform detectRangeTransform;
     [SerializeField] private float detectRangeSize;
     [SerializeField] private float atkDelayMax;
+    [SerializeField] private float atk;
     private Collider2D detectRange;
+    private Collider2D detectSkillRange;
     private float atkDelay;
-    private float atk;
     private float dashDelay;
     private bool isAttack;
     private bool isSecondPhase;
@@ -22,7 +21,7 @@ public class Boss : MonoBehaviour, IDamage
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
     [SerializeField] private Vector2 moveDirection;
-    private float agi;
+    [SerializeField] private float agi;
     #endregion
     #region 체력 관련 변수
     [Header("체력 관련 변수")]
@@ -39,7 +38,7 @@ public class Boss : MonoBehaviour, IDamage
     private void Awake()
     {
         playerObject = GameObject.Find("Player");
-        bossPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        //bossPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
     }
 
     private void OnEnable()
@@ -47,6 +46,7 @@ public class Boss : MonoBehaviour, IDamage
         moveDirection = Vector2.zero;
         hpCurrent = hpMax;
         detectRange = Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer);
+        detectSkillRange = Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize - 3.5f, playerLayer);
     }
 
     private void Update()
@@ -60,13 +60,17 @@ public class Boss : MonoBehaviour, IDamage
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(attackRangeTransform.position, attackRangeSize);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize - 3.5f);
     }
 
     private void ATK()
     {
         atkDelay -= Time.deltaTime;
 
-        if (atkDelay <= 0.001f)
+        if (atkDelay <= 0.001f && detectRange)
         {
             isAttack = true;
         }
@@ -126,11 +130,15 @@ public class Boss : MonoBehaviour, IDamage
 
     private void AGI()
     {
-        moveDirection = playerObject.transform.position - transform.position;
 
-        if (!isDash || (!detectRange && isDash))
+        if (detectRange && !isDash)
         {
+            moveDirection = playerObject.transform.position - transform.position;
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
+        }
+        else if (!isDash)
+        {
+            moveDirection = Vector2.zero;
         }
 
         attackRangeTransform.localPosition = moveDirection.normalized;
@@ -146,37 +154,43 @@ public class Boss : MonoBehaviour, IDamage
 
     private void ATKNormal()
     {
-        Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
+        print("ATKNormal");
 
-        player.GetComponent<Player>().OnDamage(0.5f + atk);
+        if (Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
+        {
+            Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer).GetComponent<Player>().OnDamage(0.5f + atk);
 
-        atkDelay = atkDelayMax;
+            atkDelay = atkDelayMax;
+        }
     }
 
     private void ATKSkillDash()
     {
-        isDash = true;
+        print("ATKSkillDash");
 
-        if (detectRange)
+        if (detectSkillRange)
         {
-            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi * 2;
+            isDash = true;
+            detectSkillRange.GetComponent<Player>().OnDamage(0.5f + atk);
         }
 
         if (isDash)
         {
             dashDelay -= Time.deltaTime;
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi * 2;
         }
 
         if (dashDelay <= 0.001f)
         {
             isDash = false;
-            dashDelay = 0.1f;
+            dashDelay = 0.01f;
             atkDelay = atkDelayMax;
         }
     }
 
     private void ATKSkillCast()
     {
+        print("ATKSkillCast");
         atkDelay = atkDelayMax;
     }
 
