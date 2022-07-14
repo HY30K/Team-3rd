@@ -15,14 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image inform = null;
     [SerializeField] Image key = null;
     [SerializeField] Image gauge = null;
-    [SerializeField] new GameObject audio = null;
     AudioSource source;
     bool isOpen = false;
     bool isOther = false;
 
     private void Awake()
     {
-        source = audio.GetComponent<AudioSource>();
+        source = GameObject.Find("AudioManager").GetComponent<AudioSource>();
     }
     private void Update()
     {

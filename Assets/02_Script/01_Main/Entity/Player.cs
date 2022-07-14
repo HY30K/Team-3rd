@@ -16,10 +16,6 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image atkGauge;
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
-    AudioSource punch;
-    AudioSource hit;
-    AudioSource skill;
-    AudioSource dash;
     private int atkLevel;
     public int ATKLevel
     {
@@ -77,10 +73,6 @@ public class Player : MonoBehaviour, IDamage
 
     private void Awake()
     {
-        punch = gameObject.GetComponent<AudioSource>();
-        skill = GameObject.Find("SkillSound").GetComponent<AudioSource>();
-        dash = GameObject.Find("DashSound").GetComponent<AudioSource>();
-
         if (instance == null)
         {
             instance = this;
@@ -132,6 +124,7 @@ public class Player : MonoBehaviour, IDamage
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
                 enemy.GetComponent<Enemy>().OnDamage(atkLevel);
+                AudioManager.instance.SFXS[2].Play();
 
                 if (atkLevel < 10)
                 {
@@ -142,7 +135,7 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-            punch.Play();
+            AudioManager.instance.SFXS[1].Play();
             atkDelay = atkDelayMax;
         }
     }
@@ -195,8 +188,8 @@ public class Player : MonoBehaviour, IDamage
                 prefab.transform.position = transform.position;
 
                 prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
-                
-                skill.Play();
+
+                AudioManager.instance.SFXS[3].Play();
 
                 atkSkillDelay = atkSkillDelayMax;
             }
@@ -209,7 +202,7 @@ public class Player : MonoBehaviour, IDamage
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
             agiSkillDelay = agiSkillDelayMax;
-            dash.Play();
+            AudioManager.instance.SFXS[4].Play();
         }
     }
 
