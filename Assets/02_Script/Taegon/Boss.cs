@@ -8,10 +8,16 @@ public class Boss : MonoBehaviour, IDamage
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 attackRangeSize;
     [SerializeField] private Transform attackRangeTransform;
-    [SerializeField] private float atkDelay;
+    [SerializeField] private Transform detectRangeTransform;
+    [SerializeField] private float detectRangeSize;
+    [SerializeField] private float atkDelayMax;
+    private Collider2D detectRange;
+    private float atkDelay;
     private float atk;
+    private float dashDelay;
     private bool isAttack;
     private bool isSecondPhase;
+    private bool isDash;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
@@ -40,6 +46,7 @@ public class Boss : MonoBehaviour, IDamage
     {
         moveDirection = Vector2.zero;
         hpCurrent = hpMax;
+        detectRange = Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer);
     }
 
     private void Update()
@@ -120,7 +127,12 @@ public class Boss : MonoBehaviour, IDamage
     private void AGI()
     {
         moveDirection = playerObject.transform.position - transform.position;
-        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
+
+        if (!isDash || (!detectRange && isDash))
+        {
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
+        }
+
         attackRangeTransform.localPosition = moveDirection.normalized;
     }
 
@@ -138,17 +150,34 @@ public class Boss : MonoBehaviour, IDamage
 
         player.GetComponent<Player>().OnDamage(0.5f + atk);
 
-        //atkDelay = atkDelayMax;
+        atkDelay = atkDelayMax;
     }
 
     private void ATKSkillDash()
     {
+        isDash = true;
 
+        if (detectRange)
+        {
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi * 2;
+        }
+
+        if (isDash)
+        {
+            dashDelay -= Time.deltaTime;
+        }
+
+        if (dashDelay <= 0.001f)
+        {
+            isDash = false;
+            dashDelay = 0.1f;
+            atkDelay = atkDelayMax;
+        }
     }
 
     private void ATKSkillCast()
     {
-
+        atkDelay = atkDelayMax;
     }
 
     public void OnDamage(float damage)
