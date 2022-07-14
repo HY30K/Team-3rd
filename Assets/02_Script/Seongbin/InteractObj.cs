@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractObj : MonoBehaviour
 {
-    public bool in_Interact;
+    public bool interacted;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +14,7 @@ public class InteractObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K) && in_Interact)
+        if (Input.GetKeyDown(KeyCode.K) && interacted)
         {
             Interact();
         }
@@ -27,14 +27,14 @@ public class InteractObj : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            in_Interact = true;
+            interacted = true;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            in_Interact = false;
+            interacted = false;
         }
     }
 }
