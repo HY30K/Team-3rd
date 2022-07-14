@@ -124,11 +124,13 @@ public class Enemy : MonoBehaviour, IDamage
             moveDirection = Vector2.zero;
             anim.SetTrigger("isDead");
             Invoke("isDead", 1);
+
         }
     }
 
     public void isDead()
     {
         enemyPooler.DespawnPrefab(gameObject);
+        PlayerMoney.money++;
     }
 }

@@ -17,6 +17,7 @@ public class Item : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public float followSpeed;
     public float power;
+    Player player;
 
     [SerializeField] private List<Sprite> itemIamge = new List<Sprite>();
 
@@ -24,32 +25,59 @@ public class Item : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Destroy(gameObject, 2.25f);
+        player = GameObject.Find("Player").GetComponent<Player>();
+    }
+    private void Start()
+    {
+        GetItem();
+        Destroy(gameObject, 1.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GetItem();
             Destroy(gameObject);
         }
     }
     private void GetItem()//statup
     {
-        switch (itemType)
+        /*switch (itemType)
         {
-            case ItemType.Protein:
-                break;
+
             case ItemType.Chicken:
+                player.HPCurrent += 50;
                 break;
             case ItemType.Energybar:
+                player.HPCurrent += 10;
                 break;
             case ItemType.Water:
+                player.HPCurrent += 2;
+                break;
+            case ItemType.Protein:
+                player.HPLevel++;
+                player.HPCurrent += 10;
                 break;
             //stat up
             default:
                 break;
+        }*/
+        if (itemType == ItemType.Chicken)
+        {
+            player.HPCurrent += 50;
+        }
+        else if (itemType == ItemType.Energybar)
+        {
+            player.HPCurrent += 10;
+        }
+        else if (itemType == ItemType.Water)
+        {
+            player.HPCurrent += 2;
+        }
+        else if (itemType == ItemType.Protein)
+        {
+            player.HPLevel++;
+            player.HPCurrent += 10;
         }
     }
     public void ItemSet()

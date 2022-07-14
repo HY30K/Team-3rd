@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
-    [SerializeField] private Animator anim;
+
+    private Animator anim;
     public enum LayerName
     {
         IdleLayer = 0,
@@ -26,7 +27,6 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
     private int atkLevel;
-    private Coroutine attackRoutine;
     public int ATKLevel
     {
         get { return atkLevel; }
@@ -52,7 +52,17 @@ public class Player : MonoBehaviour, IDamage
     [Header("체력 관련 변수")]
     [SerializeField] private Image hpGauge;
     private int hpLevel = 1;
+    public int HPLevel
+    {
+        get { return hpLevel; }
+        set { hpLevel = value; }
+    }
     private float hpCurrent;
+    public float HPCurrent
+    {
+        get { return hpCurrent; }
+        set { hpCurrent = value; }
+    }
     #endregion
     #region 스킬 관련 변수
     [Header("스킬 관련 변수")]
@@ -158,7 +168,7 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-            // AudioManager.instance.SFXS[1].Play();
+            AudioManager.instance.SFXS[1].Play();
         }
 
         if (isAttack)
@@ -169,7 +179,7 @@ public class Player : MonoBehaviour, IDamage
         if (animDelay <= 0.001f)
         {
             isAttack = false;
-            animDelay = 0.5f;
+            animDelay = 0.4f;
             atkDelay = atkDelayMax;
         }
     }
@@ -260,6 +270,7 @@ public class Player : MonoBehaviour, IDamage
         anim.SetLayerWeight((int)layerName, 1);
     }
 
+    Coroutine skillCoroutine;
 
     private void HP()
     {
@@ -273,6 +284,7 @@ public class Player : MonoBehaviour, IDamage
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
                 GameObject prefab = skillPooler.SpawnPrefab("Fireball");
+                skillCoroutine = StartCoroutine(AutoPush(prefab));
                 prefab.transform.position = transform.position;
 
                 prefab.GetComponent<Rigidbody2D>().AddForce(moveDirection * 20, ForceMode2D.Impulse);
@@ -284,6 +296,15 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
+    private IEnumerator AutoPush(GameObject prefab)
+    {
+        yield return new WaitForSeconds(0.8f);
+
+        skillPooler.DespawnPrefab(prefab);
+
+        StopCoroutine(skillCoroutine);
+    }
+
     float dashCool;
     private void AGISkill()
     {
@@ -291,8 +312,8 @@ public class Player : MonoBehaviour, IDamage
         if (agiSkillDelay <= 0.001f && Input.GetKey(KeyCode.LeftShift) && isMove)
         {
             isDash = true;
-            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
-            //AudioManager.instance.SFXS[4].Play();
+            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 2);
+            AudioManager.instance.SFXS[4].Play();
         }
 
         if (isDash)
@@ -320,13 +341,14 @@ public class Player : MonoBehaviour, IDamage
     private void StatusDelay()
     {
         atkDelayMax = 3.0f - atkLevel * 0.25f;
-        //agiSkillDelayMax = 4.0f - agiSkillLevel * 0.25f; 
+        agiSkillDelayMax = 4.0f - agiSkillLevel * 0.25f; 
     }
 
     private void StatusLimit()
     {
         atkLevel = Mathf.Clamp(atkLevel, 1, 10);
         agiLevel = Mathf.Clamp(agiLevel, 1, 10);
+        hpLevel = Mathf.Clamp(hpLevel, 1, 10);
         hpCurrent = Mathf.Clamp(hpCurrent, 0, hpLevel * 10);
         atkSkillLevel = Mathf.Clamp(atkSkillLevel, 0, 10);
         agiSkillLevel = Mathf.Clamp(agiSkillLevel, 0, 10);
