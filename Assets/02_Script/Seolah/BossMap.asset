@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3ea2ea55ee27344ac0afa358c00b61, type: 3}
   m_Name: BossMap
   m_EditorClassIdentifier: 
-  limitMin: {x: -145.5, y: -13.5}
-  limitMax: {x: -182.5, y: 44.5}
+  limitMin: {x: -182.5, y: -13.5}
+  limitMax: {x: -145.5, y: 44.5}
