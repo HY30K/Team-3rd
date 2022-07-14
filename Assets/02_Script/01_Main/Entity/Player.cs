@@ -155,7 +155,15 @@ public class Player : MonoBehaviour, IDamage
             isAttack = true;
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
-                enemy.GetComponent<Enemy>().OnDamage(atkLevel);
+
+                if (enemy.name != "Boss")
+                {
+                    enemy.GetComponent<Enemy>().OnDamage(atkLevel);
+                }
+                else
+                {
+                    enemy.GetComponent<Boss>().OnDamage(atkLevel);
+                }
 
                 AudioManager.instance.SFXS[2].Play();
 

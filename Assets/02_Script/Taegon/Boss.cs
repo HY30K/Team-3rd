@@ -78,15 +78,17 @@ public class Boss : MonoBehaviour, IDamage
         {
             int random = Random.Range(0, 2);
 
-            /*if (random == 0)
+            if (random == 0)
             {
                 isAttack = true;
 
-                anim.SetTrigger("isAttack2");
+                anim.SetBool("isWalk", false);
+                anim.SetBool("isStop", false);
+                anim.SetBool("isAttack1", true);
 
                 Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
 
-                player.GetComponent<Player>().OnDamage(0.5f + atk);
+                player.GetComponent<Player>().OnDamage(2);
 
                 isAttack = false;
 
@@ -95,24 +97,28 @@ public class Boss : MonoBehaviour, IDamage
             else
             {
                 StartCoroutine("Dash");
-            }*/
-
-            StartCoroutine("Dash");
+            }
         }
     }
 
     IEnumerator Dash()
     {
-        print("Dash");
         isDash = true;
 
         moveDirection = playerObject.transform.position - transform.position;
 
-        speed = agi * 10;
+        anim.SetBool("isWalk", false);
+        anim.SetBool("isStop", false);
+        anim.SetBool("isAttack2", true);
+        yield return new WaitForSeconds(0.25f);
+        speed = agi * 5;
+
+
+        playerObject.GetComponent<Player>().OnDamage(10);
 
         atkDelay = atkDelayMax;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         isDash = false;
 
@@ -126,8 +132,10 @@ public class Boss : MonoBehaviour, IDamage
             if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
             {
                 isMove = true;
-                anim.SetBool("isStop2", false);
-                anim.SetBool("isWalk2", true);
+                anim.SetBool("isAttack1", false);
+                anim.SetBool("isAttack2", false);
+                anim.SetBool("isStop", false);
+                anim.SetBool("isWalk", true);
 
                 moveDirection = playerObject.transform.position - transform.position;
 
@@ -141,13 +149,13 @@ public class Boss : MonoBehaviour, IDamage
                 }
                 else
                 {
-                    anim.SetBool("isStop2", true);
+                    anim.SetBool("isStop", true);
                 }
             }
             else
             {
-                anim.SetBool("isWalk2", false);
-                anim.SetBool("isStop2", true);
+                anim.SetBool("isWalk", false);
+                anim.SetBool("isStop", true);
                 moveDirection = Vector2.zero;
             }
         }
@@ -156,7 +164,6 @@ public class Boss : MonoBehaviour, IDamage
         {
             speed = agi;
         }
-        //gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * speed;
         attackRangeTransform.localPosition = moveDirection.normalized;
     }
@@ -164,7 +171,7 @@ public class Boss : MonoBehaviour, IDamage
     public void OnDamage(float damage)
     {
         hpCurrent -= damage;
-
+             
         if (hpCurrent <= 0.001f)
         {
             moveDirection = Vector2.zero;
