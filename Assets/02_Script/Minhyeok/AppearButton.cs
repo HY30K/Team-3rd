@@ -8,13 +8,18 @@ public class AppearButton : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] TextMeshProUGUI text1;
     [SerializeField] TextMeshProUGUI text2;
+    [SerializeField] TextMeshProUGUI text3;
+    [SerializeField] TextMeshProUGUI text4;
+
     GameObject test;
 
     private void Start()
     {
-        Invoke("SetText", 8);
-        Invoke("SetText2", 15);
-        Invoke("SetText3", 22);
+        Invoke("SetText", 11);
+        Invoke("SetText2", 17);
+        Invoke("SetText3", 24);
+        Invoke("SetText4", 32);
+        Invoke("SetText5", 42);
     }
     private void Update()
     {
@@ -32,6 +37,16 @@ public class AppearButton : MonoBehaviour
     void SetText3()
     {
         test = GameObject.Find("Text (TMP) (2)");
+        test.SetActive(false);
+    }
+    void SetText4()
+    {
+        test = GameObject.Find("Text (TMP) (3)");
+        test.SetActive(false);
+    }
+    void SetText5()
+    {
+        test = GameObject.Find("Text (TMP) (4)");
         test.SetActive(false);
     }
     
