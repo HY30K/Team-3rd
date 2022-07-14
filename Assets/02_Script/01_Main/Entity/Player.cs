@@ -8,6 +8,15 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamage
 {
     public static Player instance;
+    [SerializeField] private Animator anim;
+    public enum LayerName
+    {
+        IdleLayer = 0,
+        WalkLayer = 1,
+        AttackLayer = 2,
+        DashLayer = 3
+    }
+    
 
     #region 공격 관련 변수
     [Header("공격 관련 변수")]
@@ -17,6 +26,7 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Transform rangeTransform;
     [SerializeField] private float atkDelayMax;
     private int atkLevel;
+    private Coroutine attackRoutine;
     public int ATKLevel
     {
         get { return atkLevel; }
@@ -51,7 +61,7 @@ public class Player : MonoBehaviour, IDamage
     [SerializeField] private Image agiSkillGauge;
     [SerializeField] private float atkSkillDelayMax;
     public float ATKSkillDelayMax => atkSkillDelayMax;
-    private float agiSkillDelayMax;
+    [SerializeField] private float agiSkillDelayMax;
     public float AGISkillDelayMax => agiSkillDelayMax;
     private int atkSkillLevel;
     public int ATKSkillLevel
@@ -71,8 +81,16 @@ public class Player : MonoBehaviour, IDamage
     public float AGISkillDelay => agiSkillDelay;
     #endregion
 
+    private bool isMove;
+    private bool isAttack;
+    private bool isDash;
+    private bool isIdle;
+
+    float animDelay;
+
     private void Awake()
     {
+        
         if (instance == null)
         {
             instance = this;
@@ -85,6 +103,10 @@ public class Player : MonoBehaviour, IDamage
         agiDelay = agiDelayMax;
         hpCurrent = hpLevel * 10;
     }
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -94,6 +116,7 @@ public class Player : MonoBehaviour, IDamage
         StatusGauge();
         StatusDelay();
         StatusLimit();
+        HandleLayers();
 
         if (atkLevel == 10)
         {
@@ -118,9 +141,9 @@ public class Player : MonoBehaviour, IDamage
     private void ATK()
     {
         atkDelay -= Time.deltaTime;
-
-        if (atkDelay <= 0.001f && Input.GetKeyDown(KeyCode.K))
+        if (atkDelay <= 0.001f && Input.GetKeyDown(KeyCode.K) && !isDash)
         {
+            isAttack = true;
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
                 enemy.GetComponent<Enemy>().OnDamage(atkLevel);
@@ -135,18 +158,31 @@ public class Player : MonoBehaviour, IDamage
                     atkSkillLevel++;
                 }
             }
-            AudioManager.instance.SFXS[1].Play();
+            // AudioManager.instance.SFXS[1].Play();
+        }
+
+        if (isAttack)
+        {
+            animDelay -= Time.deltaTime;
+        }
+
+        if (animDelay <= 0.001f)
+        {
+            isAttack = false;
+            animDelay = 0.5f;
             atkDelay = atkDelayMax;
         }
     }
 
+    float dirDelay;
+
     private void AGI()
     {
-        agiSkillDelay -= Time.deltaTime;
+        dirDelay -= Time.deltaTime;
 
         moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if (!(agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift)))
+        if (!isDash)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agiLevel;
         }
@@ -154,7 +190,20 @@ public class Player : MonoBehaviour, IDamage
         if (moveDirection.x != 0 || moveDirection.y != 0)
         {
             agiDelay -= Time.deltaTime;
-            rangeTransform.localPosition = moveDirection;
+
+            if (dirDelay <= 0)
+            {
+                rangeTransform.localPosition = moveDirection;
+                dirDelay = 0.1f;
+            }
+
+            isIdle = false;
+            isMove = true;
+        }
+        else
+        {
+            isMove = false;
+            isIdle = true;
         }
 
         if (agiDelay <= 0.001f)
@@ -171,11 +220,50 @@ public class Player : MonoBehaviour, IDamage
             agiDelay = agiDelayMax;
         }
     }
+    public void HandleLayers()
+    {
+        anim.SetFloat("atkX", rangeTransform.localPosition.x);
+        anim.SetFloat("atkY", rangeTransform.localPosition.y);
+        if (isAttack)
+        {
+            ActivateLayer(LayerName.AttackLayer);
+        }
+        else
+        {
+            if (isMove)
+            {
+                if (!isDash)
+                {
+                    ActivateLayer(LayerName.WalkLayer);
+                    anim.SetFloat("x", moveDirection.x);
+                    anim.SetFloat("y", moveDirection.y);
+                }
+                else
+                {
+                    ActivateLayer(LayerName.DashLayer);
+                    anim.SetFloat("x", moveDirection.x);
+                    anim.SetFloat("y", moveDirection.y);
+                }
+            }
+            else if (isIdle)
+            {
+                ActivateLayer(LayerName.IdleLayer);
+            }
+        }
+    }
+    public void ActivateLayer(LayerName layerName)
+    {
+        for(int i =0; i< anim.layerCount; i++)
+        {
+            anim.SetLayerWeight(i, 0);
+        }
+        anim.SetLayerWeight((int)layerName, 1);
+    }
+
 
     private void HP()
     {
     }
-
     private void ATKSkill()
     {
         atkSkillDelay -= Time.deltaTime;
@@ -196,13 +284,27 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
+    float dashCool;
     private void AGISkill()
     {
-        if (agiSkillDelay <= 0.001f && Input.GetKeyDown(KeyCode.LeftShift) && (moveDirection.x != 0 || moveDirection.y != 0))
+        agiSkillDelay -= Time.deltaTime;
+        if (agiSkillDelay <= 0.001f && Input.GetKey(KeyCode.LeftShift) && isMove)
         {
+            isDash = true;
             gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * (agiLevel + agiSkillLevel * 10);
+            //AudioManager.instance.SFXS[4].Play();
+        }
+
+        if (isDash)
+        {
+            dashCool -= Time.deltaTime;
+        }
+
+        if (dashCool <= 0.001f)
+        {
+            isDash = false;
+            dashCool = 0.1f;
             agiSkillDelay = agiSkillDelayMax;
-            AudioManager.instance.SFXS[4].Play();
         }
     }
 
@@ -218,7 +320,7 @@ public class Player : MonoBehaviour, IDamage
     private void StatusDelay()
     {
         atkDelayMax = 3.0f - atkLevel * 0.25f;
-        agiSkillDelayMax = 4.0f - agiSkillLevel * 0.25f; 
+        //agiSkillDelayMax = 4.0f - agiSkillLevel * 0.25f; 
     }
 
     private void StatusLimit()
