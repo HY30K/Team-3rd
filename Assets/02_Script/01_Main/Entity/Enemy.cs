@@ -29,12 +29,14 @@ public class Enemy : MonoBehaviour, IDamage
     [Header("플레이어 관련 변수")]
     [SerializeField] private LayerMask playerLayer;
     private GameObject playerObject;
+    private Animator anim = null;
     #endregion
 
     private void Awake()
     {
         playerObject = GameObject.Find("Player");
         enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -63,6 +65,8 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (atkDelay <= 0.001f && Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
         {
+            anim.SetTrigger("lsAttack");
+
             Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
 
             player.GetComponent<Player>().OnDamage(0.5f + atk);
@@ -75,12 +79,15 @@ public class Enemy : MonoBehaviour, IDamage
     {
         if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
         {
+            anim.SetBool("lsWark", true);
+
             moveDirection = playerObject.transform.position - transform.position;
 
             moveDirection.Normalize();
         }
         else
         {
+            anim.SetBool("lsIdle", true);
             moveDirection = Vector2.zero;
         }
 
@@ -94,6 +101,7 @@ public class Enemy : MonoBehaviour, IDamage
 
         if (hpCurrent <= 0.001f)
         {
+            anim.SetTrigger("lsDeath");
             enemyPooler.DespawnPrefab(gameObject);
         }
     }
