@@ -12,9 +12,9 @@ public class PlayerMoney : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E) && Input.GetKeyDown(KeyCode.O))
         {
-            money+= 100;
+            money+= 200;
         }
     }
 }
