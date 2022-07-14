@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : MonoBehaviour, IDamage
@@ -6,54 +8,52 @@ public class Boss : MonoBehaviour, IDamage
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 attackRangeSize;
     [SerializeField] private Transform attackRangeTransform;
-    [SerializeField] private Transform detectRangeTransform;
-    [SerializeField] private float detectRangeSize;
-    [SerializeField] private float atkDelayMax;
     [SerializeField] private float atk;
-    private Collider2D detectRange;
-    private Collider2D detectSkillRange;
+    [SerializeField] private float atkDelayMax;
     private float atkDelay;
-    private float dashDelay;
-    private bool isAttack;
-    private bool isSecondPhase;
-    private bool isDash;
+    private SpriteRenderer spriteRenderer;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
     [SerializeField] private Vector2 moveDirection;
+    [SerializeField] private Transform detectRangeTransform;
+    [SerializeField] private float detectRangeSize;
     [SerializeField] private float agi;
     #endregion
     #region 체력 관련 변수
     [Header("체력 관련 변수")]
     [SerializeField] private float hpMax;
-    private ObjectPooler bossPooler;
+    private ObjectPooler enemyPooler;
     private float hpCurrent;
     #endregion
     #region 플레이어 관련 변수
     [Header("플레이어 관련 변수")]
     [SerializeField] private LayerMask playerLayer;
     private GameObject playerObject;
+    private Animator anim = null;
     #endregion
 
     private void Awake()
     {
         playerObject = GameObject.Find("Player");
-        //bossPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        enemyPooler = GameObject.Find("EnemySpawner").GetComponent<ObjectPooler>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        dashDelay = 0.1f;
+        atkDelay = atkDelayMax;
     }
 
     private void OnEnable()
     {
         moveDirection = Vector2.zero;
         hpCurrent = hpMax;
-        detectRange = Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer);
-        detectSkillRange = Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize - 3.5f, playerLayer);
+        atkDelay = atkDelayMax;
     }
 
     private void Update()
     {
         ATK();
         AGI();
-        HP();
     }
 
     private void OnDrawGizmos()
@@ -62,136 +62,103 @@ public class Boss : MonoBehaviour, IDamage
         Gizmos.DrawCube(attackRangeTransform.position, attackRangeSize);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(detectRangeTransform.position, detectRangeSize - 3.5f);
     }
+
+    private bool isAttack;
+    private bool isMove;
+    private bool isDash;
+    float dashDelay;
+    float speed;
 
     private void ATK()
     {
         atkDelay -= Time.deltaTime;
 
-        if (atkDelay <= 0.001f && detectRange)
+        if (atkDelay <= 0.001f && Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
         {
-            isAttack = true;
-        }
-        else
-        {
-            isAttack = false;
-        }
+            int random = Random.Range(0, 2);
 
-        if (isAttack)
-        {
-            int selector = Random.Range(1, 11);
-
-            if (!isSecondPhase)
+            /*if (random == 0)
             {
-                switch (selector)
-                {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                        ATKNormal();
-                        break;
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                        ATKSkillDash();
-                        break;
-                }
+                isAttack = true;
+
+                anim.SetTrigger("isAttack2");
+
+                Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
+
+                player.GetComponent<Player>().OnDamage(0.5f + atk);
+
+                isAttack = false;
+
+                atkDelay = atkDelayMax;
             }
             else
             {
-                switch (selector)
-                {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                        ATKNormal();
-                        break;
-                    case 6:
-                    case 7:
-                    case 8:
-                        ATKSkillDash();
-                        break;
-                    case 9:
-                    case 10:
-                        ATKSkillCast();
-                        break;
-                }
-            }
+                StartCoroutine("Dash");
+            }*/
+
+            StartCoroutine("Dash");
         }
+    }
+
+    IEnumerator Dash()
+    {
+        print("Dash");
+        isDash = true;
+
+        moveDirection = playerObject.transform.position - transform.position;
+
+        speed = agi * 10;
+
+        atkDelay = atkDelayMax;
+
+        yield return new WaitForSeconds(1f);
+
+        isDash = false;
+
+        StopAllCoroutines();
     }
 
     private void AGI()
     {
-
-        if (detectRange && !isDash)
+        if (hpCurrent > 0.001f && !isDash)
         {
-            moveDirection = playerObject.transform.position - transform.position;
-            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
-        }
-        else if (!isDash)
-        {
-            moveDirection = Vector2.zero;
+            if (Physics2D.OverlapCircle(detectRangeTransform.position, detectRangeSize, playerLayer))
+            {
+                isMove = true;
+                anim.SetBool("isStop2", false);
+                anim.SetBool("isWalk2", true);
+
+                moveDirection = playerObject.transform.position - transform.position;
+
+                if (transform.position.x > playerObject.transform.position.x)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else if (transform.position.x < playerObject.transform.position.x)
+                {
+                    spriteRenderer.flipX = false;
+                }
+                else
+                {
+                    anim.SetBool("isStop2", true);
+                }
+            }
+            else
+            {
+                anim.SetBool("isWalk2", false);
+                anim.SetBool("isStop2", true);
+                moveDirection = Vector2.zero;
+            }
         }
 
+        if (!isDash)
+        {
+            speed = agi;
+        }
+        //gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
+        gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * speed;
         attackRangeTransform.localPosition = moveDirection.normalized;
-    }
-
-    private void HP()
-    {
-        if (hpCurrent <= (hpMax / 2))
-        {
-            isSecondPhase = true;
-        }
-    }
-
-    private void ATKNormal()
-    {
-        print("ATKNormal");
-
-        if (Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
-        {
-            Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer).GetComponent<Player>().OnDamage(0.5f + atk);
-
-            atkDelay = atkDelayMax;
-        }
-    }
-
-    private void ATKSkillDash()
-    {
-        print("ATKSkillDash");
-
-        if (detectSkillRange)
-        {
-            isDash = true;
-            detectSkillRange.GetComponent<Player>().OnDamage(0.5f + atk);
-        }
-
-        if (isDash)
-        {
-            dashDelay -= Time.deltaTime;
-            gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi * 2;
-        }
-
-        if (dashDelay <= 0.001f)
-        {
-            isDash = false;
-            dashDelay = 0.01f;
-            atkDelay = atkDelayMax;
-        }
-    }
-
-    private void ATKSkillCast()
-    {
-        print("ATKSkillCast");
-        atkDelay = atkDelayMax;
     }
 
     public void OnDamage(float damage)
@@ -200,7 +167,16 @@ public class Boss : MonoBehaviour, IDamage
 
         if (hpCurrent <= 0.001f)
         {
-            bossPooler.DespawnPrefab(gameObject);
+            moveDirection = Vector2.zero;
+            anim.SetTrigger("isDead");
+            Invoke("isDead", 1);
+
         }
+    }
+
+    public void isDead()
+    {
+        enemyPooler.DespawnPrefab(gameObject);
+        PlayerMoney.money++;
     }
 }

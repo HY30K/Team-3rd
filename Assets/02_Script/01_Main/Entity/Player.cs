@@ -122,7 +122,6 @@ public class Player : MonoBehaviour, IDamage
     {
         ATK();
         AGI();
-        HP();
         StatusGauge();
         StatusDelay();
         StatusLimit();
@@ -156,14 +155,8 @@ public class Player : MonoBehaviour, IDamage
             isAttack = true;
             foreach (Collider2D enemy in Physics2D.OverlapBoxAll(rangeTransform.position, rangeSize, 0, enemyLayer))
             {
-                if (enemy.name != "Boss")
-                {
-                    enemy.GetComponent<Enemy>().OnDamage(atkLevel);
-                }
-                else
-                {
-                    enemy.GetComponent<Boss>().OnDamage(atkLevel);
-                }
+                enemy.GetComponent<Enemy>().OnDamage(atkLevel);
+
                 AudioManager.instance.SFXS[2].Play();
 
                 if (atkLevel < 10)
@@ -279,9 +272,6 @@ public class Player : MonoBehaviour, IDamage
 
     Coroutine skillCoroutine;
 
-    private void HP()
-    {
-    }
     private void ATKSkill()
     {
         atkSkillDelay -= Time.deltaTime;
