@@ -18,14 +18,7 @@ public class Fireball : MonoBehaviour
     {
         foreach (Collider2D enemy in Physics2D.OverlapCircleAll(hitPosition.position, hitSize, enemyLayer))
         {
-            if (enemy.name != "Boss")
-            {
-                enemy.GetComponent<Enemy>().OnDamage(player.ATKLevel + player.ATKSkillLevel);
-            }
-            else
-            {
-                enemy.GetComponent<Boss>().OnDamage(player.ATKLevel + player.ATKSkillLevel);
-            }
+            enemy.GetComponent<Enemy>().OnDamage(player.ATKLevel + player.ATKSkillLevel);
 
             player.ATKSkillLevel++;
         }
