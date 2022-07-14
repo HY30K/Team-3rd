@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 94b842824dbf2d7489f9bf6d74a7da8a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - EF_???
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 920726014976e124d991b7334222b9d9, type: 3}
+  - {fileID: 12800000, guid: 21618b7422da0ea4cb6453dcbc66a163, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

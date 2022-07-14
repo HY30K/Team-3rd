@@ -8,9 +8,10 @@ public class Boss : MonoBehaviour, IDamage
     [Header("공격 관련 변수")]
     [SerializeField] private Vector2 attackRangeSize;
     [SerializeField] private Transform attackRangeTransform;
-    [SerializeField] private float atkDelayMax;
+    [SerializeField] private float atkDelay;
     private float atk;
-    private float atkDelay;
+    private bool isAttack;
+    private bool isSecondPhase;
     #endregion
     #region 이동 관련 변수
     [Header("이동 관련 변수")]
@@ -45,6 +46,7 @@ public class Boss : MonoBehaviour, IDamage
     {
         ATK();
         AGI();
+        HP();
     }
 
     private void OnDrawGizmos()
@@ -57,13 +59,61 @@ public class Boss : MonoBehaviour, IDamage
     {
         atkDelay -= Time.deltaTime;
 
-        if (atkDelay <= 0.001f && Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer))
+        if (atkDelay <= 0.001f)
         {
-            Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
+            isAttack = true;
+        }
+        else
+        {
+            isAttack = false;
+        }
 
-            player.GetComponent<Player>().OnDamage(0.5f + atk);
+        if (isAttack)
+        {
+            int selector = Random.Range(1, 11);
 
-            atkDelay = atkDelayMax;
+            if (!isSecondPhase)
+            {
+                switch (selector)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        ATKNormal();
+                        break;
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        ATKSkillDash();
+                        break;
+                }
+            }
+            else
+            {
+                switch (selector)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        ATKNormal();
+                        break;
+                    case 6:
+                    case 7:
+                    case 8:
+                        ATKSkillDash();
+                        break;
+                    case 9:
+                    case 10:
+                        ATKSkillCast();
+                        break;
+                }
+            }
         }
     }
 
@@ -72,6 +122,33 @@ public class Boss : MonoBehaviour, IDamage
         moveDirection = playerObject.transform.position - transform.position;
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
         attackRangeTransform.localPosition = moveDirection.normalized;
+    }
+
+    private void HP()
+    {
+        if (hpCurrent <= (hpMax / 2))
+        {
+            isSecondPhase = true;
+        }
+    }
+
+    private void ATKNormal()
+    {
+        Collider2D player = Physics2D.OverlapBox(attackRangeTransform.position, attackRangeSize, 0, playerLayer);
+
+        player.GetComponent<Player>().OnDamage(0.5f + atk);
+
+        //atkDelay = atkDelayMax;
+    }
+
+    private void ATKSkillDash()
+    {
+
+    }
+
+    private void ATKSkillCast()
+    {
+
     }
 
     public void OnDamage(float damage)
