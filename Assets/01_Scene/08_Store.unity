@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 790558631}
   - component: {fileID: 790558635}
   - component: {fileID: 790558634}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -469,7 +469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 790558630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -716,6 +716,10 @@ PrefabInstance:
       propertyPath: itemType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8910612972341894628, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: in_Interact
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8910612972341894630, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -763,6 +767,26 @@ PrefabInstance:
     - target: {fileID: 8910612972341894631, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_Name
       value: ShopTable (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8910612972830236592, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 4312595174870005808, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+    - target: {fileID: 8910612972830236593, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+    - target: {fileID: 8910612972830236593, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4312595174870005808, guid: 1ae9e9a9859a0fb41be81d571eb129f1, type: 2}
+    - target: {fileID: 8910612972830236595, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8910612972891346736, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8910612973558635329, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_Sprite
@@ -898,6 +922,10 @@ PrefabInstance:
       propertyPath: itemType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8910612972341894628, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: itemPrice
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8910612972341894630, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -945,6 +973,10 @@ PrefabInstance:
     - target: {fileID: 8910612972341894631, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
       propertyPath: m_Name
       value: ShopTable
+      objectReference: {fileID: 0}
+    - target: {fileID: 8910612972830236595, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5ef5d73e2a69774c935f44e6abad9c8, type: 3}
