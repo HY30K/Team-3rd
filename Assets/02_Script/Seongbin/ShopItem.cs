@@ -7,7 +7,7 @@ public class ShopItem : MonoBehaviour
 {
     public bool interacted;
 
-    [SerializeField] private TextMeshPro itemText;
+    //[SerializeField] private TextMeshPro itemText;
     [SerializeField] private GameObject itemBG;
     [SerializeField] private GameObject item;
     public string itemName;
@@ -25,10 +25,10 @@ public class ShopItem : MonoBehaviour
     public GameObject Image;
     public GameObject itemPrefab;
 
-    void Start()
+/*    void Start()
     {
         ItemName();
-    }
+    }*/
     private void Interact()
     {
         Debug.Log(gameObject.name);
@@ -70,10 +70,10 @@ public class ShopItem : MonoBehaviour
         }
         return false;
     }
-    private void ItemName()
+/*    private void ItemName()
     {
         itemText.text = itemName + "\n" + itemPrice + "G";
-    }
+    }*/
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K) && interacted)
