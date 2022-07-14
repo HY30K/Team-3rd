@@ -15,6 +15,10 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine("EnemySpawn");
         StartCoroutine("EnemySpawn2");
         StartCoroutine("EnemySpawn3");
+
+        GameObject enemy = enemyPooler.SpawnPrefab("Boss");
+
+        enemy.transform.position = new Vector2(-100, 20);
     }
 
     private IEnumerator EnemySpawn()
