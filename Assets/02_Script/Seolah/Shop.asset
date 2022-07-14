@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3ea2ea55ee27344ac0afa358c00b61, type: 3}
   m_Name: Shop
   m_EditorClassIdentifier: 
-  limitMin: {x: -38.5, y: 18.5}
-  limitMax: {x: -8.5, y: 44.5}
+  limitMin: {x: 69.5, y: 20.5}
+  limitMax: {x: 95.5, y: 45.5}
