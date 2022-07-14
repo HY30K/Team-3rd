@@ -6,6 +6,11 @@ public class StageLock : MonoBehaviour
 {
     [SerializeField] private Transform stagePos;
     [SerializeField] private Vector2 size;
+    public RandomSpawner randomSpanwer;
+/*    private Coroutine coroutine;
+    private Coroutine coroutine2;
+    private Coroutine coroutine3;*/
+
     public enum StageLockType
     {
         stage1,
@@ -30,6 +35,30 @@ public class StageLock : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log(lockType);
+            /*if (StageLockType.stage1 == lockType)
+            {
+                coroutine = StartCoroutine(randomSpanwer.EnemySpawn());
+                *//*StopCoroutine(coroutine2);
+                StopCoroutine(coroutine3);*//*
+            }
+            else if (StageLockType.stage2 == lockType)
+            {
+                coroutine2 = StartCoroutine(randomSpanwer.EnemySpawn2());
+                *//*StopCoroutine(coroutine);
+                StopCoroutine(coroutine3);*//*
+            }
+            else if (StageLockType.stage3 == lockType)
+            {
+                coroutine3 = StartCoroutine(randomSpanwer.EnemySpawn3());
+                *//*StopCoroutine(coroutine);
+                StopCoroutine(coroutine2);*//*
+            }
+            else
+            {
+                StopCoroutine(coroutine);
+                StopCoroutine(coroutine2);
+                StopCoroutine(coroutine3);
+            }*/
         }
     }
 }

@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour, IDamage
                 anim.SetBool("isStop", true);
                 moveDirection = Vector2.zero;
             }
-        }    
+        }
 
         gameObject.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * agi;
         attackRangeTransform.localPosition = moveDirection;
@@ -123,14 +123,20 @@ public class Enemy : MonoBehaviour, IDamage
         {
             moveDirection = Vector2.zero;
             anim.SetTrigger("isDead");
-            Invoke("isDead", 1);
-
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            enemyPooler.DespawnPrefab(gameObject);
         }
     }
 
-    public void isDead()
+    public void Dead()
     {
-        enemyPooler.DespawnPrefab(gameObject);
         PlayerMoney.money++;
+
+        enemyPooler.DespawnPrefab(gameObject);
     }
 }
